@@ -1,0 +1,193 @@
+@import 'tailwindcss';
+
+/* ============================================================ */
+/*  NEXUS//13 — Design Tokens                                   */
+/*  Administrative void aesthetic. Not cyberpunk.               */
+/* ============================================================ */
+
+@theme {
+  /* Void scale — cold, administrative */
+  --color-void-0: #060607;
+  --color-void-1: #0a0a0c;
+  --color-void-2: #111114;
+  --color-void-3: #18181c;
+  --color-void-4: #232328;
+  --color-void-5: #2e2e35;
+
+  /* Text hierarchy */
+  --color-text-0: #f4f4f2;
+  --color-text-1: #c8c8c4;
+  --color-text-2: #8a8a86;
+  --color-text-3: #56565a;
+
+  /* Functional signals — agency-codified */
+  --color-signal: #c5ff3c;       /* live data, scans, access granted */
+  --color-signal-dim: #8db82a;
+  --color-alert: #ff3636;        /* refused, hostile */
+  --color-warn: #ffb020;         /* classification, attention */
+  --color-cipher: #5bc0eb;       /* encrypted, intercepted */
+  --color-redacted: #1a1a1e;
+
+  /* Typography — distinctive, non-Inter */
+  --font-display: 'General Sans', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-serif: 'Instrument Serif', ui-serif, serif;
+
+  /* Motion — Cold Protocol */
+  --ease-protocol: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-scan: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================ */
+/*  Base reset — opinionated                                    */
+/* ============================================================ */
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-void-0);
+  color: var(--color-text-1);
+  font-family: var(--font-display);
+  font-feature-settings: 'ss01', 'ss02', 'cv11';
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-void-0);
+}
+
+/* ============================================================ */
+/*  Custom scrollbar — agency style                             */
+/* ============================================================ */
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--color-void-1); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-void-4);
+  border: 1px solid var(--color-void-1);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-void-5); }
+
+/* ============================================================ */
+/*  Grain overlay — atmospheric, ~3% opacity                    */
+/* ============================================================ */
+
+.nexus-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  animation: grain-drift 8s steps(8) infinite;
+}
+
+@keyframes grain-drift {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(3%, 15%); }
+  50% { transform: translate(12%, -5%); }
+  70% { transform: translate(-9%, 8%); }
+  90% { transform: translate(5%, -3%); }
+}
+
+/* ============================================================ */
+/*  CRT scanline — toggleable via .nexus-scanline               */
+/* ============================================================ */
+
+.nexus-scanline::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    rgba(255, 255, 255, 0.012) 3px,
+    transparent 4px
+  );
+}
+
+/* ============================================================ */
+/*  8px grid overlay — appears on certain panels                */
+/* ============================================================ */
+
+.nexus-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(197, 255, 60, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(197, 255, 60, 0.02) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+/* ============================================================ */
+/*  Scan reveal animation — the signature motion                */
+/* ============================================================ */
+
+@keyframes scan-reveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.4;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+.scan-reveal {
+  animation: scan-reveal 800ms var(--ease-scan) both;
+}
+
+/* ============================================================ */
+/*  Cursor — system mode                                        */
+/* ============================================================ */
+
+body {
+  cursor: crosshair;
+}
+
+button, a, [role='button'] {
+  cursor: pointer;
+}
+
+/* ============================================================ */
+/*  Utilities — short, agency-style                             */
+/* ============================================================ */
+
+.text-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.text-serif-italic { font-family: var(--font-serif); font-style: italic; }
+.tracking-system { letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* Blinking caret for terminals / status indicators */
+@keyframes pulse-signal {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.pulse-signal { animation: pulse-signal 1.6s var(--ease-protocol) infinite; }
+
+/* Hard glitch — used sparingly on errors */
+@keyframes hard-glitch {
+  0%, 100% { transform: translate(0); filter: none; }
+  20% { transform: translate(-1px, 1px); filter: hue-rotate(90deg); }
+  40% { transform: translate(1px, -1px); }
+  60% { transform: translate(-2px, 0); filter: invert(0.1); }
+  80% { transform: translate(0, 2px); }
+}
+.hard-glitch { animation: hard-glitch 220ms steps(4) 1; }
+
+/* Focus ring — sharp, no soft glow */
+*:focus-visible {
+  outline: 1px solid var(--color-signal);
+  outline-offset: 2px;
+}
