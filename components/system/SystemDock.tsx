@@ -34,6 +34,8 @@ export function SystemDock() {
           <Link
             key={mod.href}
             href={mod.href}
+            aria-current={active ? 'page' : undefined}
+            aria-label={`${mod.label} module${active ? ' (current)' : ''}`}
             className={`
               group relative flex items-center justify-center
               h-12 border-b border-void-4
@@ -45,7 +47,7 @@ export function SystemDock() {
               }
             `}
           >
-            <span aria-hidden="true">{mod.code}</span>
+            <span aria-hidden>{mod.code}</span>
 
             {active && (
               <span className="absolute left-0 top-0 bottom-0 w-px bg-signal" />
