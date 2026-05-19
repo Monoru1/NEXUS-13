@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 import { ScanReveal } from '@/components/primitives/ScanReveal';
 import { DossierHeader } from '@/components/dossier/DossierHeader';
@@ -15,6 +16,11 @@ import { VESPER } from '@/content/dossiers/n13-002-vesper';
 import { KAIROS } from '@/content/dossiers/n13-003-kairos';
 import { MERIDIAN } from '@/content/dossiers/n13-004-meridian';
 import type { Dossier } from '@/types/narrative';
+
+const DossierProjection = dynamic(
+  () => import('@/components/dossier/DossierProjection').then((m) => ({ default: m.DossierProjection })),
+  { ssr: false },
+);
 
 const DOSSIERS: Record<string, Dossier> = {
   'n13-001-ariadne': ARIADNE,
@@ -59,11 +65,12 @@ export default function DossierPage() {
   const now = new Date().toISOString();
 
   return (
-    <div className="py-10 max-w-7xl">
+    <div className="py-6 lg:py-10 max-w-7xl">
       <ScrollProgress />
+
       {/* Breadcrumb */}
       <ScanReveal>
-        <nav className="mb-6 text-mono text-[10px] tracking-system text-text-3" aria-label="Breadcrumb">
+        <nav className="mb-6 text-mono text-[10px] tracking-system text-text-3 px-1" aria-label="Breadcrumb">
           <span>AR-CTRL</span>
           <span className="mx-2 text-void-5">·</span>
           <span>ARCHIVES</span>
@@ -77,17 +84,19 @@ export default function DossierPage() {
         <DossierHeader dossier={dossier} clearance={clearance} />
       </ScanReveal>
 
-      {/* Main grid */}
-      <div className="mt-0 grid grid-cols-12 gap-0 border border-t-0 border-void-4">
-        {/* Left column */}
-        <div className="col-span-8 border-r border-void-4 px-8 py-8 space-y-12">
+      {/* Main grid — responsive: 1 col on mobile, 12-col on desktop */}
+      <div className="mt-0 grid grid-cols-1 lg:grid-cols-12 border border-t-0 border-void-4">
+
+        {/* Left column — primary content */}
+        <div className="lg:col-span-8 lg:border-r border-void-4 px-4 sm:px-8 py-8 space-y-10">
+
           {/* Summary */}
           <ScanReveal delay={160}>
             <section aria-label="Case summary">
               <h2 className="text-mono text-[10px] tracking-system text-text-3 mb-4">
                 SUMMARY
               </h2>
-              <div className="text-serif-italic text-[15px] text-text-1 leading-[1.8] max-w-2xl space-y-4">
+              <div className="text-serif-italic text-[15px] text-text-1 leading-[1.8] space-y-4">
                 {dossier.summary.split('\n\n').map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
@@ -96,7 +105,7 @@ export default function DossierPage() {
           </ScanReveal>
 
           {/* Timeline */}
-          <ScanReveal delay={240}>
+          <div>
             {hydrated && (
               <DossierTimeline
                 events={dossier.timeline}
@@ -105,9 +114,9 @@ export default function DossierPage() {
                 onFlagContradiction={flagContradiction}
               />
             )}
-          </ScanReveal>
+          </div>
 
-          {/* Evidence grid */}
+          {/* Evidence */}
           <section aria-label="Evidence catalogue">
             <h2 className="text-mono text-[10px] tracking-system text-text-3 mb-5">
               EVIDENCE · {dossier.evidence.length} ITEMS
@@ -126,8 +135,11 @@ export default function DossierPage() {
           </section>
         </div>
 
-        {/* Right column */}
-        <aside className="col-span-4 px-6 py-8 space-y-6" aria-label="Dossier sidebar">
+        {/* Right column — sidebar */}
+        <aside
+          className="lg:col-span-4 px-4 sm:px-6 py-8 space-y-6 border-t lg:border-t-0 border-void-4"
+          aria-label="Dossier sidebar"
+        >
           {/* Clearance meter */}
           <ScanReveal delay={200}>
             <div className="border border-void-4 bg-void-1 p-4">
@@ -179,6 +191,11 @@ export default function DossierPage() {
               </div>
             </ScanReveal>
           )}
+
+          {/* 3D projection — desktop only, lazy-loaded */}
+          <ScanReveal delay={400}>
+            <DossierProjection dossier={dossier} />
+          </ScanReveal>
 
           {/* Classification audit log */}
           <ScanReveal delay={440}>

@@ -95,7 +95,7 @@ export function DossierTimeline({
                       {event.title}
                     </h3>
 
-                    <p className="text-[13px] text-text-2 leading-relaxed max-w-2xl">
+                    <p className="text-[13px] leading-relaxed max-w-2xl text-text-1">
                       {event.description}
                     </p>
 

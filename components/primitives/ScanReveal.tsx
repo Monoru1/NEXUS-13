@@ -10,11 +10,6 @@ type Props = {
   className?: string;
 };
 
-/**
- * The signature motion of NEXUS//13.
- * Reveals content with a horizontal scan-in (clip-path), like a CRT syncing.
- * Used everywhere a panel or row appears.
- */
 export function ScanReveal({
   children,
   delay = 0,
@@ -31,6 +26,13 @@ export function ScanReveal({
     const el = ref.current;
     if (!el) return;
 
+    // Activate immediately if element is already fully in viewport on mount
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setActive(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
@@ -38,7 +40,9 @@ export function ScanReveal({
           observer.disconnect();
         }
       },
-      { threshold: 0.15 },
+      // threshold 0 = fires as soon as any pixel enters viewport
+      // rootMargin pre-triggers 80px before element enters bottom of screen
+      { threshold: 0, rootMargin: '0px 0px 80px 0px' },
     );
 
     observer.observe(el);
@@ -51,7 +55,7 @@ export function ScanReveal({
       className={className}
       style={{
         clipPath: active ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)',
-        opacity: active ? 1 : 0.4,
+        opacity: active ? 1 : 0,
         transition: `clip-path ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
         willChange: 'clip-path, opacity',
       }}
