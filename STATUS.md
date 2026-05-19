@@ -1,67 +1,99 @@
 # NEXUS//13 — Session Status
 
 **Last updated:** 2026-05-19  
-**Branch:** `claude/setup-project-verification-ZSh4Z`
+**Branch:** `claude/phase-3-terminal`
 
 ---
 
 ## Current state
 
-- `npm install` — clean, no flags required (`next` 15.0.3 → 15.5.18)
+- `npm install` — clean, no flags
 - `npm run typecheck` — clean
 - `npm run build` — clean, zero warnings
+- Routes: `/` `/nexus` `/archives` `/archives/[slug]` `/terminal` `/_not-found`
 
 ---
 
-## What shipped
+## Phase 3a — Terminal (this session)
 
-### Session 1 — Phase 1 (verified) + Phase 2 (complete)
-- Boot sequence, dashboard, design system, all shell components
-- Fixed: Turbopack + typedRoutes incompatibility
-- Fixed: Font @imports ordering in Tailwind v4 (moved to layout `<head>`)
-- All 14 Phase 2 files — see PR #1
+### Commits
+
+| Commit | File(s) |
+|---|---|
+| `feat(terminal): command parser` | `lib/terminal/types.ts`, `lib/terminal/parser.ts` |
+| `feat(terminal): command registry` | `lib/terminal/commands.ts` |
+| `feat(terminal): zustand store` | `lib/store/terminal.ts` |
+| `feat(terminal): TerminalInput` | `components/terminal/TerminalInput.tsx` |
+| `feat(terminal): TerminalLine` | `components/terminal/TerminalLine.tsx` |
+| `feat(terminal): page` | `app/(system)/terminal/page.tsx` |
+| `feat(terminal): time-gated easter egg` | `app/(system)/terminal/loading.tsx` |
+| `chore(deploy): Vercel + Netlify config` | `vercel.json`, `netlify.toml` |
+
+### Documented commands (type `help`)
+```
+help                   show this message
+ls dossiers            list active dossiers
+cat dossier <id>       read dossier summary
+subjects               list known subjects
+whoami                 identify operator
+clear                  clear terminal output
+exit                   terminate session
+nexus                  navigate to overview
+```
+
+### Hidden commands (not in `help`)
+```
+sudo           "you are already operating beyond clearance."
+13.4-ctrl      BACKDOOR ECHO. WHO TOLD YOU. + hard-glitch effect
+find ariadne   time-gated (22:00–04:59 local): 6-line transcript fragment
+               outside window: SEARCH WINDOW CLOSED. RETRY DURING NIGHT WATCH.
+```
+
+### Quality bar verdict
+
+A senior dev who opens `/terminal` and types `sudo` gets a serif response that makes them smile. `13.4-ctrl` glitches the screen. `find ariadne` at 2am returns a real-feeling transcript fragment with a redacted audio window and a quote that sounds like it was recorded before the subject was declared dead.
+
+The terminal refuses to close (`exit` is not the user's exit to take). It's not a terminal that looks like a terminal — it behaves like one.
+
+---
+
+## Deployment
+
+### Vercel (recommended — zero config)
+1. Push to GitHub
+2. Import at vercel.com
+3. Deploy — Next.js auto-detected, no env vars needed until Phase 4
+
+### Netlify
+1. Push to GitHub
+2. Import at netlify.com — build command read from `netlify.toml`
+3. Install plugin if prompted: `@netlify/plugin-nextjs`
+4. No env vars needed until Phase 4
+
+---
+
+## Previous sessions
+
+### Session 1 — Phase 1 + Phase 2 (14 files)
+Boot, dashboard, ARIADNE dossier, all signature screen components.
 
 ### Session 2 — Repo hygiene
-| Fix | Commit |
-|---|---|
-| Peer deps | `fix(deps)` — bumped next 15.0.3 → 15.5.18, migrated themeColor to viewport |
-| Lockfile | `chore` — regenerated from scratch |
-| SystemDock | `fix(dock)` — active state logic verified correct, added aria-current |
+Peer deps fix (next 15.0.3 → 15.5.18), lockfile, SystemDock aria fix.
 
-### Session 3 — Phase 2.5 (polish)
-
-**Bloc A** — already done in Session 2. Confirmed clean.
-
-**Bloc B — Loading states + 404**
-
-| File | Description |
-|---|---|
-| `app/(system)/archives/loading.tsx` | 4-row skeleton matching list layout: code column, title+classification+status bars, date column, evidence/contradiction counts. Opacity tapers per row (1.0 → 0.64). `pulse-signal` animation. |
-| `app/(system)/archives/[slug]/loading.tsx` | Full dossier skeleton: header (two-panel metadata grid), left column (summary bars, 3 timeline events, 3 evidence cards), right column (clearance meter, subject card, audit log). Structurally mirrors real layout to avoid CLS on load. |
-| `app/not-found.tsx` | Terminal-style 404. Agency index query that returned nothing. Three lines of serif-italic ambiguity: "THIS RESOURCE DOES NOT EXIST. / OR DOES NOT EXIST YET. / OR HAS BEEN REDACTED." Return button uses auth-panel style (signal border). No glitch animation. |
-
-**Bloc C — ARIADNE prose audit**
-
-Checked for: `mysterious`, `strange`, `inexplicable`, `unexplained`, `mysteriously`.  
-**Result: 0 occurrences.** Prose register already clean — facts described soberly, mystery emerges from juxtaposition. No rewrite needed. Commit skipped per brief.
+### Session 3 — Phase 2.5
+Loading skeletons (archives, dossier), 404 page in-universe, ARIADNE prose audit (0 lazy words found).
 
 ---
 
-## Not built (anti-goals confirmed)
+## Next: Phase 3b (Three.js Graph)
 
-- Phase 3: Three.js graph, terminal page
-- Phase 4: Supabase, audio engine, WebSockets
+Branch: `claude/phase-3-graph` from main once Phase 3a is merged.
+See CLAUDE.md §Prompt #3 for full spec.
 
----
-
-## Next: Phase 3a (Terminal)
-
-Branch: `claude/phase-3-terminal` (create from main once PR#1 merged)
-
-Files:
-1. `lib/terminal/parser.ts`
-2. `lib/terminal/commands.ts`
-3. `lib/store/terminal.ts`
-4. `components/terminal/TerminalLine.tsx`
-5. `components/terminal/TerminalInput.tsx`
-6. `app/(system)/terminal/page.tsx`
+Key files:
+- `lib/graph/topology.ts` — fibonacci sphere layout
+- `components/graph/Scene.tsx` — R3F canvas with OrbitControls
+- `components/graph/Node.tsx` / `Edge.tsx`
+- `lib/store/graph.ts`
+- `components/graph/InspectorPanel.tsx`
+- `app/(system)/nexus-graph/page.tsx`
