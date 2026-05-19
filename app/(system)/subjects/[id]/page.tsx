@@ -11,6 +11,9 @@ const STATUS_COLOR: Record<string, string> = {
   REDACTED: '#ff3636',
 };
 
+// Only dossiers with a full archive page — stubs render as restricted
+const AVAILABLE_DOSSIERS = new Set(['n13-001-ariadne']);
+
 const DOSSIER_TITLES: Record<string, { title: string; code: string }> = {
   'n13-001-ariadne': { title: 'ARIADNE', code: 'N13-001' },
   'n13-002-vesper': { title: 'VESPER', code: 'N13-002' },
@@ -118,7 +121,8 @@ export default async function SubjectDetailPage({ params }: Props) {
               {subject.relatedDossiers.map((slug) => {
                 const meta = DOSSIER_TITLES[slug];
                 if (!meta) return null;
-                return (
+                const available = AVAILABLE_DOSSIERS.has(slug);
+                return available ? (
                   <Link
                     key={slug}
                     href={`/archives/${slug}`}
@@ -126,23 +130,29 @@ export default async function SubjectDetailPage({ params }: Props) {
                     style={{ borderColor: '#2e2e35' }}
                   >
                     <div>
-                      <span
-                        className="text-xs tracking-widest mr-3"
-                        style={{ color: '#56565a', fontSize: '10px' }}
-                      >
+                      <span className="text-xs tracking-widest mr-3" style={{ color: '#56565a', fontSize: '10px' }}>
                         {meta.code}
                       </span>
-                      <span
-                        className="text-xs tracking-widest uppercase group-hover:text-white transition-colors duration-150"
-                        style={{ color: '#a0a0a4' }}
-                      >
+                      <span className="text-xs tracking-widest uppercase group-hover:text-white transition-colors duration-150" style={{ color: '#a0a0a4' }}>
                         {meta.title}
                       </span>
                     </div>
-                    <span style={{ color: '#2e2e35' }} className="group-hover:text-text-3 transition-colors duration-150">
-                      →
-                    </span>
+                    <span className="text-xs opacity-40 group-hover:opacity-100 transition-opacity duration-150" style={{ color: '#a0a0a4' }}>→</span>
                   </Link>
+                ) : (
+                  <div key={slug} className="flex items-center justify-between px-4 py-3 border" style={{ borderColor: '#1a1a1e' }}>
+                    <div>
+                      <span className="text-xs tracking-widest mr-3" style={{ color: '#2e2e35', fontSize: '10px' }}>
+                        {meta.code}
+                      </span>
+                      <span className="text-xs tracking-widest uppercase" style={{ color: '#2e2e35' }}>
+                        {meta.title}
+                      </span>
+                    </div>
+                    <span className="text-xs tracking-widest" style={{ color: '#2e2e35', fontSize: '10px' }}>
+                      ACCESS RESTRICTED
+                    </span>
+                  </div>
                 );
               })}
             </div>

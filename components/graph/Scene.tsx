@@ -45,8 +45,10 @@ function CameraController({ controlsRef }: CameraControllerProps) {
   const { cameraTarget } = useGraphStore();
 
   const animRef = useRef<{
-    from: THREE.Vector3;
-    target: THREE.Vector3;
+    fromCam: THREE.Vector3;
+    toCam: THREE.Vector3;
+    fromOrbit: THREE.Vector3;
+    toOrbit: THREE.Vector3;
     elapsed: number;
     duration: number;
   } | null>(null);
@@ -57,15 +59,19 @@ function CameraController({ controlsRef }: CameraControllerProps) {
     if (cameraTarget && cameraTarget !== prevTarget.current) {
       prevTarget.current = cameraTarget;
       const nodePos = new THREE.Vector3(...cameraTarget);
-      // Orbit toward the node: keep current radius, reposition camera
-      const dir = camera.position.clone().sub(nodePos).normalize();
-      const radius = Math.max(camera.position.length() * 0.7, 5);
-      const dest = nodePos.clone().add(dir.multiplyScalar(radius));
+      const currentOrbit = controlsRef.current
+        ? controlsRef.current.target.clone()
+        : new THREE.Vector3(0, 0, 0);
+      // Position camera at same offset from nodePos as it is from current orbit
+      const offset = camera.position.clone().sub(currentOrbit);
+      const dest = nodePos.clone().add(offset);
       animRef.current = {
-        from: camera.position.clone(),
-        target: dest,
+        fromCam: camera.position.clone(),
+        toCam: dest,
+        fromOrbit: currentOrbit,
+        toOrbit: nodePos,
         elapsed: 0,
-        duration: 0.8, // 800ms
+        duration: 0.8,
       };
     }
 
@@ -73,9 +79,10 @@ function CameraController({ controlsRef }: CameraControllerProps) {
     const anim = animRef.current;
     anim.elapsed = Math.min(anim.elapsed + delta, anim.duration);
     const t = easeProtocol(anim.elapsed / anim.duration);
-    camera.position.lerpVectors(anim.from, anim.target, t);
+    camera.position.lerpVectors(anim.fromCam, anim.toCam, t);
 
     if (controlsRef.current) {
+      controlsRef.current.target.lerpVectors(anim.fromOrbit, anim.toOrbit, t);
       controlsRef.current.update();
     }
 

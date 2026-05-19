@@ -18,7 +18,7 @@ type Props = {
 };
 
 export function TransmissionRow({ tx }: Props) {
-  const dateStr = tx.timestamp.replace('T', ' ').replace('Z', ' UTC').slice(0, 23) + ' UTC';
+  const dateStr = tx.timestamp.replace('T', ' ').slice(0, 19) + ' UTC';
 
   return (
     <Link
