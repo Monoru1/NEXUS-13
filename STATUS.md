@@ -1,101 +1,86 @@
 # NEXUS//13 — Session Status
 
 **Last updated:** 2026-05-19  
-**Branch:** `claude/phase-3-graph` (contains Phase 2 hotfix + Phase 3 + Phase 4 + Boost)
+**Branch:** `main` — all phases merged, production-ready
 
 ---
 
 ## Build status
 
 - `npm run typecheck` — clean ✅
-- Routes: `/` `/nexus` `/archives` `/archives/[slug]` `/nexus-graph` `/subjects` `/subjects/[id]` `/transmissions` `/transmissions/[id]` `/manifest` `/_not-found`
-- All 4 dossier routes resolve (`/archives/n13-001-ariadne` through `n13-004-meridian`)
+- `npm run build` — clean ✅
+- All routes resolved and prerendered
 
 ---
 
-## Deployment chain — AWAITING RYAD ACTION
+## All PRs merged — main is complete
 
-| PR | Branch | Status | Action |
-|---|---|---|---|
-| **#1** | `claude/setup-project-verification-ZSh4Z` → `main` | Draft | **Merge first** |
-| **#2** | `claude/phase-3-terminal` → `main` | Draft | Merge after #1 |
-| **#3** | `claude/phase-3-graph` → `main` | Draft | Merge after #2 |
-
-**Next steps for Ryad:**
-1. Open GitHub → PRs → merge #1 → verify Netlify deploy on main
-2. Merge PR #2 (terminal) → verify
-3. Merge PR #3 (this branch — everything below) → verify
+PRs #1 (setup/phase-2), #2 (terminal), #3 (graph/phase-4/boost) all merged to main.
+Hotfixes and 3D projection applied directly on main.
 
 ---
 
-## What shipped in this session
+## Routes
 
-### Hotfix — All 4 dossier routes now live
-
-Previously only ARIADNE had content. VESPER/KAIROS/MERIDIAN returned 404.
-
-| Dossier | Code | Content |
-|---|---|---|
-| ARIADNE | N13-001 | Reported dead 2019, multiple sightings. 5 events, 7 evidence, 2 contradictions |
-| VESPER | N13-002 | 17.3 MHz transmissions, unregistered band, impossible triangulation altitude |
-| KAIROS | N13-003 | TOP SECRET personnel file — all fields redacted, 3 events, 4 evidence |
-| MERIDIAN | N13-004 | CLOSED case silently reopened 2024, 5 events, 8 evidence, 2 contradictions |
-
-### Phase 3 — Three.js Graph + Subjects + Transmissions
-
-Already committed in previous sessions, see graph below:
-
-| Screen | Route | Description |
-|---|---|---|
-| Nexus Graph | `/nexus-graph` | Three.js 3D fibonacci sphere, node inspector, animated camera |
-| Subjects | `/subjects` + `/subjects/[id]` | 9-subject registry, status filters, dossier cross-links |
-| Transmissions | `/transmissions` + `/transmissions/[id]` | 8 signals, waveform placeholders, classification filters |
-| Terminal | `/terminal` | Interactive CLI with 8 commands + 3 hidden easter eggs |
-
-### Phase 4 — Infrastructure + Polish
-
-| File | What |
+| Route | Status |
 |---|---|
-| `app/layout.tsx` | Full OG metadata + twitter card + `next/font` for Geist Mono |
-| `app/opengraph-image.tsx` | 1200×630 classified interface card via `next/og` |
-| `app/icon.tsx` | 32×32 N favicon via `next/og` |
-| `public/robots.txt` | Disallow all |
-| `nexus/page.tsx`, `archives/page.tsx` | `revalidate = 3600` (ISR) |
-| `app/globals.css` | `--font-mono` now uses next/font variable |
-| `README.md` | Full rewrite for hiring panel audience |
-| `DEPLOY.md` | Netlify setup guide, known issues, phase table |
-
-### Boost — Effects + Audio + Easter Eggs
-
-| File | What |
-|---|---|
-| `components/effects/ConsoleEasterEgg.tsx` | Styled console log with session ref |
-| `components/effects/AuditTrail.tsx` | HTML comment fragment in page source |
-| `components/effects/KonamiCode.tsx` | ↑↑↓↓←→←→BA → CTRL-PRIME overlay |
-| `components/effects/ScrollProgress.tsx` | 1px signal bar at viewport top on dossier pages |
-| `components/effects/CursorTrace.tsx` | Canvas particle trail (signal green, 18-frame fade) |
-| `app/(system)/manifest/page.tsx` | Hidden page — not in nav, 6 assets listed including CTRL-PRIME |
-| `lib/audio/ui-sounds.ts` | Web Audio API — click/denied/success/reveal sounds |
-| `lib/audio/ambient-engine.ts` | Procedural drone (A1/E2/A2), LFO modulation, 3s fade |
-| `components/system/StatusBar.tsx` | Audio toggle button (localStorage persisted) |
-| `components/primitives/RedactedText.tsx` | Click glitch (320ms flicker before reveal), hover lighten |
-| `app/globals.css` | `.card-hover`, `.link-underline`, `.classification-top-secret` |
+| `/` | Boot sequence + auth |
+| `/nexus` | Dashboard — 4 dossier cards, activity feed |
+| `/archives` | Dossier index |
+| `/archives/n13-001-ariadne` | ARIADNE — 5 events, 7 evidence, 2 contradictions |
+| `/archives/n13-002-vesper` | VESPER — 4 events, 6 evidence, 1 contradiction |
+| `/archives/n13-003-kairos` | KAIROS — 3 events, 4 evidence (all redacted), 0 contradictions |
+| `/archives/n13-004-meridian` | MERIDIAN — 5 events, 8 evidence, 2 contradictions |
+| `/nexus-graph` | Three.js 3D fibonacci sphere relationship graph |
+| `/subjects` | 9-subject registry with status filters |
+| `/subjects/[id]` | Subject detail (9 generated paths) |
+| `/terminal` | Interactive agency shell (8 documented + 3 hidden commands) |
+| `/transmissions` | 8 intercepted signals |
+| `/transmissions/[id]` | Transmission detail (8 generated paths) |
+| `/manifest` | Hidden page — not in nav |
 
 ---
 
-## Easter eggs
+## Critical bugs fixed (this session)
 
-Four things not listed in navigation:
-1. **Console** — open devtools on any page
-2. **Page source** — HTML comment audit log fragment
-3. **Konami code** — ↑↑↓↓←→←→BA anywhere in the app
-4. **`/manifest`** — direct URL only
+### Desktop — ScanReveal text visibility
+- **Root cause:** `ScanReveal trigger="view"` starts with `clip-path: inset(0 100% 0 0)`. IntersectionObserver at `threshold: 0.15` could fail to fire for elements already in viewport on mount (IO checks DOM position, not animated clip state).
+- **Fix:** Immediate activation if element is in viewport on mount via `getBoundingClientRect`. Threshold lowered to 0. `rootMargin: '0px 0px 80px 0px'` pre-triggers before element reaches viewport bottom.
+- **Secondary:** Forced explicit `text-text-1` on timeline event descriptions, evidence summaries, and subject summary in header (were inheriting `text-text-2` which is `#8a8a86` — too light).
+
+### Mobile — Layout not responsive
+- **Root cause:** `grid-cols-12` with `col-span-8/4` — no mobile breakpoints. SystemDock `fixed left-0` permanently covers left side of content.
+- **Fix — grid:** `grid-cols-1 lg:grid-cols-12` with `lg:col-span-8` / `lg:col-span-4`. Borders adjusted.
+- **Fix — SystemDock:** Desktop sidebar stays (`hidden lg:flex`). Mobile bottom nav added (`lg:hidden`, fixed bottom, 6-module bar).
+- **Fix — layout:** `pl-16` only on `lg:pl-16`. Mobile: `pl-2 sm:pl-4`. `pb-20` on mobile for bottom nav clearance.
+- **Fix — DossierHeader:** Title row stacks on mobile. Metadata `grid-cols-2` → `grid-cols-1 sm:grid-cols-2`.
+
+---
+
+## 3D Projection feature (this session)
+
+`components/dossier/DossierProjection.tsx` — desktop-only (hidden lg:block), lazy-loaded (ssr: false):
+- Wireframe cube, edge color keyed to classification: TOP SECRET=alert (#ff3636), SECRET=warn (#ffb020)
+- Inner octahedron cage (1.5×1.5×1.5, 45° Y offset), lower opacity
+- Orbiting data particles — count = min(timeline + evidence + contradictions, 12), distributed on Fibonacci sphere
+- Pulsing octahedron core
+- Footer: EVENTS / EVIDENCE / CONTRADICT count from actual dossier data
+- Scanline overlay for visual cohesion with the rest of the UI
+
+---
+
+## Easter eggs (4 active)
+
+1. **Console** — open devtools: styled log with NEXUS branding + unique session ref
+2. **Page source** — HTML comment: N13-004 audit log fragment (internal system log)
+3. **Konami code** — ↑↑↓↓←→←→BA → CTRL-PRIME overlay (clearance L-7)
+4. **`/manifest`** — direct URL only, 6 assets listed including CTRL-PRIME
 
 ---
 
 ## Phase 5 — Next
 
-When Ryad is ready, branch from main after #1/#2/#3 merge.
+When Ryad is ready, branch from main.
 
 Key items:
 - Supabase fake realtime activity feed on `/nexus` dashboard
