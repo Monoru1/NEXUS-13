@@ -18,7 +18,7 @@ type Props = {
 };
 
 export function InspectorPanel({ graph }: Props) {
-  const { selectedNodeId, select } = useGraphStore();
+  const { selectedNodeId, select, jumpTo } = useGraphStore();
 
   const nodeMap = useMemo(() => {
     const m = new Map<string, GraphNode>();
@@ -97,7 +97,7 @@ export function InspectorPanel({ graph }: Props) {
                   {connected.map((n) => (
                     <li key={n.id}>
                       <button
-                        onClick={() => select(n.id)}
+                        onClick={() => jumpTo(n.id, n.position)}
                         className="w-full text-left px-4 py-1.5 text-xs tracking-wide flex justify-between items-center hover:bg-void-2/30 transition-colors duration-150"
                         style={{
                           color: STATUS_COLOR[n.status] ?? '#a0a0a4',
