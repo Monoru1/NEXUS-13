@@ -77,7 +77,7 @@ Decryption status: PENDING`,
       title: 'Signal content transcript — 2022-08-14',
       date: '2022-08-14T03:22:22Z',
       summary: `Automated transcription of numeric sequences from first interception.`,
-      content: `> VESPER TRANSMISSION 001 // 2022-08-14 03:22:22Z
+      transcript: `> VESPER TRANSMISSION 001 // 2022-08-14 03:22:22Z
 > STATION: NORTH-7 // FREQUENCY: 17.3 MHz
 > TRANSCRIPTION (automated, confidence 91%)
 
@@ -99,6 +99,7 @@ Decryption status: PENDING`,
       title: 'Spectrum analysis report',
       date: '2022-08-22T11:47:00Z',
       summary: `Technical analysis confirming anomalous frequency and ruling out equipment fault.`,
+      imageUrl: '/evidence/n13-002-spectrum-anomaly.svg',
       content: `SPECTRUM ANALYSIS REPORT // NEXUS TECHNICAL DIVISION
 DATE: 2022-08-22
 ANALYST: CTRL-ANALYST-09
