@@ -1,6 +1,12 @@
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { ScanReveal } from '@/components/primitives/ScanReveal';
 import { ClassificationTag } from '@/components/primitives/ClassificationTag';
+
+const NexusProjection = dynamic(
+  () => import('@/components/projections/NexusProjection').then((m) => ({ default: m.NexusProjection })),
+  { ssr: false },
+);
 
 export const revalidate = 3600;
 
@@ -68,7 +74,13 @@ const toneColor = (t: string) => {
 
 export default function NexusOverviewPage() {
   return (
-    <div className="py-6 lg:py-10 max-w-7xl">
+    <div className="max-w-7xl">
+      {/* 3D Projection hero */}
+      <div className="mb-0 border border-void-4 border-b-0">
+        <NexusProjection />
+      </div>
+
+      <div className="py-6 lg:py-10">
       <ScanReveal>
         <header className="mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
           <div>
@@ -184,6 +196,7 @@ export default function NexusOverviewPage() {
             Whoever is watching, knows you read this.&rdquo;
           </p>
         </aside>
+      </div>
       </div>
     </div>
   );

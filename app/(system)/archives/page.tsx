@@ -1,6 +1,12 @@
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { ScanReveal } from '@/components/primitives/ScanReveal';
 import { ClassificationTag } from '@/components/primitives/ClassificationTag';
+
+const ArchivesProjection = dynamic(
+  () => import('@/components/projections/ArchivesProjection').then((m) => ({ default: m.ArchivesProjection })),
+  { ssr: false },
+);
 
 export const revalidate = 3600;
 
@@ -53,7 +59,13 @@ const ALL_DOSSIERS = [
 
 export default function ArchivesPage() {
   return (
-    <div className="py-10 max-w-7xl">
+    <div className="max-w-7xl">
+      {/* 3D Projection hero */}
+      <div className="border border-void-4 border-b-0">
+        <ArchivesProjection />
+      </div>
+
+      <div className="py-10">
       <ScanReveal>
         <header className="mb-10 flex items-baseline justify-between">
           <div>
@@ -86,16 +98,9 @@ export default function ArchivesPage() {
         {ALL_DOSSIERS.map((d, idx) => (
           <ScanReveal key={d.slug} delay={100 * idx}>
             <Link
-              href={d.slug === 'n13-001-ariadne' ? `/archives/${d.slug}` : '#'}
+              href={`/archives/${d.slug}`}
               aria-label={`Open dossier ${d.code} — ${d.title}`}
-              className={`
-                block group border border-void-4
-                bg-void-1 transition-colors duration-200
-                ${d.slug === 'n13-001-ariadne'
-                  ? 'hover:bg-void-2 hover:border-void-5'
-                  : 'cursor-not-allowed opacity-60'
-                }
-              `}
+              className="block group border border-void-4 bg-void-1 hover:bg-void-2 hover:border-void-5 transition-colors duration-200"
             >
               <div className="px-6 py-5 grid grid-cols-12 gap-4 items-start">
                 <div className="col-span-2 text-mono text-[11px] tracking-system text-text-3 group-hover:text-signal transition-colors pt-0.5">
@@ -128,11 +133,6 @@ export default function ArchivesPage() {
                       {d.contradictions} CONTRADICT.
                     </div>
                   )}
-                  {d.slug !== 'n13-001-ariadne' && (
-                    <div className="text-text-3 mt-0.5 text-[9px]">
-                      ACCESS RESTRICTED
-                    </div>
-                  )}
                 </div>
               </div>
             </Link>
@@ -145,6 +145,7 @@ export default function ArchivesPage() {
           SHOWING 4 OF 4 DOSSIERS · CLEARANCE L-2 · 3 DOSSIERS REQUIRE HIGHER ACCESS
         </p>
       </ScanReveal>
+      </div>
     </div>
   );
 }
