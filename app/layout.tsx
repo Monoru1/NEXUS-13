@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ClassificationBar } from '@/components/system/ClassificationBar';
 import { StatusBar } from '@/components/system/StatusBar';
@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     nocache: true,
     nosnippet: true,
   },
+};
+
+export const viewport: Viewport = {
   themeColor: '#060607',
 };
 
