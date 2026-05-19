@@ -1,16 +1,15 @@
 # NEXUS//13 — Session Status
 
 **Last updated:** 2026-05-19  
-**Branch:** `claude/phase-3-graph` (contains Phase 3b Graph + Phase 3c Subjects + Transmissions)
+**Branch:** `claude/phase-3-graph` (contains Phase 2 hotfix + Phase 3 + Phase 4 + Boost)
 
 ---
 
-## Current state
+## Build status
 
-- `npm install` — clean, no flags
-- `npm run typecheck` — clean
-- `npm run build` — clean, zero warnings
-- Routes: `/` `/nexus` `/archives` `/archives/[slug]` `/terminal` `/nexus-graph` `/subjects` `/subjects/[id]` `/transmissions` `/transmissions/[id]` `/_not-found`
+- `npm run typecheck` — clean ✅
+- Routes: `/` `/nexus` `/archives` `/archives/[slug]` `/nexus-graph` `/subjects` `/subjects/[id]` `/transmissions` `/transmissions/[id]` `/manifest` `/_not-found`
+- All 4 dossier routes resolve (`/archives/n13-001-ariadne` through `n13-004-meridian`)
 
 ---
 
@@ -18,83 +17,88 @@
 
 | PR | Branch | Status | Action |
 |---|---|---|---|
-| **#1** | `claude/setup-project-verification-ZSh4Z` → `main` | ✅ Netlify preview building | **Merge via GitHub UI** |
+| **#1** | `claude/setup-project-verification-ZSh4Z` → `main` | Draft | **Merge first** |
 | **#2** | `claude/phase-3-terminal` → `main` | Draft | Merge after #1 |
 | **#3** | `claude/phase-3-graph` → `main` | Draft | Merge after #2 |
 
 **Next steps for Ryad:**
-1. Open https://github.com/Monoru1/NEXUS-13/pull/1 → merge
-2. Check Netlify deploy succeeds on main
-3. Merge PR #2 (terminal), then PR #3 (this branch)
-4. PRs #2 and #3 may need a quick rebase after #1 merges — no conflicts expected (all new files)
+1. Open GitHub → PRs → merge #1 → verify Netlify deploy on main
+2. Merge PR #2 (terminal) → verify
+3. Merge PR #3 (this branch — everything below) → verify
 
 ---
 
-## Phase 3 — Complete
+## What shipped in this session
 
-### Phase 3a — Terminal (on `claude/phase-3-terminal`, PR #2)
+### Hotfix — All 4 dossier routes now live
 
-| Command | Type |
+Previously only ARIADNE had content. VESPER/KAIROS/MERIDIAN returned 404.
+
+| Dossier | Code | Content |
+|---|---|---|
+| ARIADNE | N13-001 | Reported dead 2019, multiple sightings. 5 events, 7 evidence, 2 contradictions |
+| VESPER | N13-002 | 17.3 MHz transmissions, unregistered band, impossible triangulation altitude |
+| KAIROS | N13-003 | TOP SECRET personnel file — all fields redacted, 3 events, 4 evidence |
+| MERIDIAN | N13-004 | CLOSED case silently reopened 2024, 5 events, 8 evidence, 2 contradictions |
+
+### Phase 3 — Three.js Graph + Subjects + Transmissions
+
+Already committed in previous sessions, see graph below:
+
+| Screen | Route | Description |
+|---|---|---|
+| Nexus Graph | `/nexus-graph` | Three.js 3D fibonacci sphere, node inspector, animated camera |
+| Subjects | `/subjects` + `/subjects/[id]` | 9-subject registry, status filters, dossier cross-links |
+| Transmissions | `/transmissions` + `/transmissions/[id]` | 8 signals, waveform placeholders, classification filters |
+| Terminal | `/terminal` | Interactive CLI with 8 commands + 3 hidden easter eggs |
+
+### Phase 4 — Infrastructure + Polish
+
+| File | What |
 |---|---|
-| `help` | documented |
-| `ls dossiers` | documented |
-| `cat dossier <slug>` | documented |
-| `subjects` | documented |
-| `whoami` | documented |
-| `clear` | documented |
-| `exit` | documented (refuses to close) |
-| `nexus` | documented (routes to /nexus) |
-| `sudo` | hidden — serif response |
-| `13.4-ctrl` | hidden — hard-glitch + BACKDOOR ECHO |
-| `find ariadne` | hidden — time-gated 22:00–04:59 local |
+| `app/layout.tsx` | Full OG metadata + twitter card + `next/font` for Geist Mono |
+| `app/opengraph-image.tsx` | 1200×630 classified interface card via `next/og` |
+| `app/icon.tsx` | 32×32 N favicon via `next/og` |
+| `public/robots.txt` | Disallow all |
+| `nexus/page.tsx`, `archives/page.tsx` | `revalidate = 3600` (ISR) |
+| `app/globals.css` | `--font-mono` now uses next/font variable |
+| `README.md` | Full rewrite for hiring panel audience |
+| `DEPLOY.md` | Netlify setup guide, known issues, phase table |
 
-### Phase 3b — Graph (this branch)
+### Boost — Effects + Audio + Easter Eggs
 
-| File | Description |
+| File | What |
 |---|---|
-| `lib/graph/topology.ts` | buildGraph() — fibonacci sphere, edge dedup |
-| `lib/store/graph.ts` | hover/select/cameraTarget |
-| `components/graph/` | Node, Edge, Scene, InspectorPanel, GraphLegend |
-| `app/(system)/nexus-graph/` | page + loading skeleton |
-
-### Phase 3c — Subjects (this branch)
-
-9 subjects:
-| Codename | Status |
-|---|---|
-| ARIADNE | DECEASED |
-| CYGNUS | ACTIVE |
-| VESPER | UNKNOWN |
-| RELAY-DELTA | UNKNOWN |
-| KAIROS | REDACTED |
-| LOOM | ACTIVE |
-| MERIDIAN | UNKNOWN |
-| ANCHOR | DECEASED |
-| WATCHER | REDACTED |
-
-### Phase 3d — Transmissions (this branch)
-
-8 transmissions — 3 anomalous (band 17.3 MHz, linked to VESPER), 2 fully redacted, 1 decryption-pending.
-
-| ID | Band | Anomaly | Audio |
-|---|---|---|---|
-| tx-001 | 17.3 MHz | ◆ | available |
-| tx-002 | 12.4 MHz | — | available |
-| tx-003 | 9.1 MHz | — | unavailable (redacted) |
-| tx-004 | 17.3 MHz | ◆ | available |
-| tx-005 | 14.2 MHz | — | decryption-pending |
-| tx-006 | 7.8 MHz | — | unavailable (redacted) |
-| tx-007 | 17.3 MHz | ◆ | decryption-pending |
-| tx-008 | 11.5 MHz | — | available |
+| `components/effects/ConsoleEasterEgg.tsx` | Styled console log with session ref |
+| `components/effects/AuditTrail.tsx` | HTML comment fragment in page source |
+| `components/effects/KonamiCode.tsx` | ↑↑↓↓←→←→BA → CTRL-PRIME overlay |
+| `components/effects/ScrollProgress.tsx` | 1px signal bar at viewport top on dossier pages |
+| `components/effects/CursorTrace.tsx` | Canvas particle trail (signal green, 18-frame fade) |
+| `app/(system)/manifest/page.tsx` | Hidden page — not in nav, 6 assets listed including CTRL-PRIME |
+| `lib/audio/ui-sounds.ts` | Web Audio API — click/denied/success/reveal sounds |
+| `lib/audio/ambient-engine.ts` | Procedural drone (A1/E2/A2), LFO modulation, 3s fade |
+| `components/system/StatusBar.tsx` | Audio toggle button (localStorage persisted) |
+| `components/primitives/RedactedText.tsx` | Click glitch (320ms flicker before reveal), hover lighten |
+| `app/globals.css` | `.card-hover`, `.link-underline`, `.classification-top-secret` |
 
 ---
 
-## Next: Phase 4 (Supabase telemetry + audio engine)
+## Easter eggs
 
-Branch: `claude/phase-4-data` from main once Phase 3 PRs are merged.
+Four things not listed in navigation:
+1. **Console** — open devtools on any page
+2. **Page source** — HTML comment audit log fragment
+3. **Konami code** — ↑↑↓↓←→←→BA anywhere in the app
+4. **`/manifest`** — direct URL only
+
+---
+
+## Phase 5 — Next
+
+When Ryad is ready, branch from main after #1/#2/#3 merge.
 
 Key items:
-- Supabase: `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- Fake realtime activity feed on `/nexus` dashboard
-- Audio engine for ARIADNE + VESPER transmissions
-- Operator telemetry (anonymous, opt-out via KAIROS easter egg)
+- Supabase fake realtime activity feed on `/nexus` dashboard
+- `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` in Netlify env vars
+- Anonymous operator telemetry (opt-out via KAIROS easter egg)
+- Audio on VESPER transmission pages (decode animation)
