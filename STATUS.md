@@ -5,11 +5,30 @@
 
 ---
 
-## Current state
+## Deployment chain — AWAITING RYAD ACTION
 
-- `npm install` — clean, no flags required (`next` 15.0.3 → 15.5.18)
+| PR | Branch | Status | Action needed |
+|---|---|---|---|
+| **#1** | `claude/setup-project-verification-ZSh4Z` → `main` | ✅ Ready to merge | **Ryad: merge via GitHub UI** |
+| **#2** | `claude/phase-3-terminal` → `main` | Draft | Merge after #1 |
+| **#3** | `claude/phase-3-graph` → `main` | Draft | Merge after #2 |
+
+**Once PR #1 is merged, Netlify will build cleanly.** PRs #2 and #3 may need rebase onto updated main before merging — no conflicts expected (they add new files only).
+
+**Next steps for Ryad:**
+1. Open https://github.com/Monoru1/NEXUS-13/pull/1
+2. Click "Ready for review" → then "Merge pull request"
+3. Trigger Netlify redeploy (auto if webhook configured, else manual)
+4. Merge PR #2 (terminal) then PR #3 (graph) once #1 is on main
+
+---
+
+## Build verification (this branch)
+
+- `npm install` — clean, no flags (`next` bumped 15.0.3 → 15.5.18 fixes ERESOLVE)
 - `npm run typecheck` — clean
 - `npm run build` — clean, zero warnings
+- `netlify.toml` — ✅ created (NODE_VERSION=20, NPM_FLAGS=--no-audit --no-fund, @netlify/plugin-nextjs)
 
 ---
 
@@ -19,49 +38,43 @@
 - Boot sequence, dashboard, design system, all shell components
 - Fixed: Turbopack + typedRoutes incompatibility
 - Fixed: Font @imports ordering in Tailwind v4 (moved to layout `<head>`)
-- All 14 Phase 2 files — see PR #1
+- All 14 Phase 2 files — signature screen `/archives/[slug]` with ARIADNE dossier
 
 ### Session 2 — Repo hygiene
 | Fix | Commit |
 |---|---|
 | Peer deps | `fix(deps)` — bumped next 15.0.3 → 15.5.18, migrated themeColor to viewport |
 | Lockfile | `chore` — regenerated from scratch |
-| SystemDock | `fix(dock)` — active state logic verified correct, added aria-current |
+| SystemDock | `fix(dock)` — active state logic, added aria-current |
 
 ### Session 3 — Phase 2.5 (polish)
-
-**Bloc A** — already done in Session 2. Confirmed clean.
-
-**Bloc B — Loading states + 404**
-
 | File | Description |
 |---|---|
-| `app/(system)/archives/loading.tsx` | 4-row skeleton matching list layout: code column, title+classification+status bars, date column, evidence/contradiction counts. Opacity tapers per row (1.0 → 0.64). `pulse-signal` animation. |
-| `app/(system)/archives/[slug]/loading.tsx` | Full dossier skeleton: header (two-panel metadata grid), left column (summary bars, 3 timeline events, 3 evidence cards), right column (clearance meter, subject card, audit log). Structurally mirrors real layout to avoid CLS on load. |
-| `app/not-found.tsx` | Terminal-style 404. Agency index query that returned nothing. Three lines of serif-italic ambiguity: "THIS RESOURCE DOES NOT EXIST. / OR DOES NOT EXIST YET. / OR HAS BEEN REDACTED." Return button uses auth-panel style (signal border). No glitch animation. |
+| `app/(system)/archives/loading.tsx` | Skeleton matching list layout, pulse animation |
+| `app/(system)/archives/[slug]/loading.tsx` | Full dossier skeleton, matches real layout to avoid CLS |
+| `app/not-found.tsx` | Terminal-style in-universe 404 |
 
-**Bloc C — ARIADNE prose audit**
+### Session 4 — Phase 3a Terminal (on `claude/phase-3-terminal`, PR #2)
+- `lib/terminal/parser.ts` — positional args, flags, quoted strings
+- `lib/terminal/commands.ts` — 8 documented + 3 hidden commands
+- `lib/store/terminal.ts` — Zustand + IndexedDB history (cap 100)
+- `components/terminal/TerminalLine.tsx` / `TerminalInput.tsx`
+- `app/(system)/terminal/page.tsx`
+- `vercel.json` + `netlify.toml` (also on PR #3 branch)
 
-Checked for: `mysterious`, `strange`, `inexplicable`, `unexplained`, `mysteriously`.  
-**Result: 0 occurrences.** Prose register already clean — facts described soberly, mystery emerges from juxtaposition. No rewrite needed. Commit skipped per brief.
+### Session 5 — Phase 3b Graph (on `claude/phase-3-graph`, PR #3)
+- Three.js + R3F + drei installed
+- `content/dossiers/_stubs.ts` — VESPER, KAIROS, MERIDIAN stubs
+- `lib/graph/topology.ts` — fibonacci sphere layout, buildGraph()
+- `lib/store/graph.ts` — hover/select/cameraTarget
+- `components/graph/` — Node, Edge, Scene, InspectorPanel, GraphLegend
+- `app/(system)/nexus-graph/page.tsx` + `loading.tsx`
 
 ---
 
-## Not built (anti-goals confirmed)
+## Not built yet (Phase 3 incomplete)
 
-- Phase 3: Three.js graph, terminal page
-- Phase 4: Supabase, audio engine, WebSockets
+- `/subjects` page — subject list + detail (Prompt #1)
+- `/transmissions` page — intercept list + detail (Prompt #1)
 
----
-
-## Next: Phase 3a (Terminal)
-
-Branch: `claude/phase-3-terminal` (create from main once PR#1 merged)
-
-Files:
-1. `lib/terminal/parser.ts`
-2. `lib/terminal/commands.ts`
-3. `lib/store/terminal.ts`
-4. `components/terminal/TerminalLine.tsx`
-5. `components/terminal/TerminalInput.tsx`
-6. `app/(system)/terminal/page.tsx`
+These will be built on `claude/phase-3-graph` (or a fresh branch from updated main after PR #1 merges).
