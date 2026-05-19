@@ -68,14 +68,14 @@ const toneColor = (t: string) => {
 
 export default function NexusOverviewPage() {
   return (
-    <div className="py-10 max-w-7xl">
+    <div className="py-6 lg:py-10 max-w-7xl">
       <ScanReveal>
-        <header className="mb-12 flex items-baseline justify-between">
+        <header className="mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
           <div>
             <p className="text-mono text-[10px] tracking-system text-text-3 mb-2">
               NX-CTRL · OVERVIEW · 13.4
             </p>
-            <h1 className="font-display text-[42px] leading-none font-medium text-text-0">
+            <h1 className="font-display text-[32px] sm:text-[42px] leading-none font-medium text-text-0">
               Operational status
             </h1>
             <p className="mt-4 text-text-2 max-w-xl leading-relaxed">
@@ -85,15 +85,15 @@ export default function NexusOverviewPage() {
             </p>
           </div>
 
-          <div className="text-right text-mono text-[11px] tracking-system">
+          <div className="text-mono text-[11px] tracking-system sm:text-right shrink-0">
             <div className="text-text-3">CLEARANCE</div>
             <div className="text-signal text-2xl tabular-nums">L-2</div>
           </div>
         </header>
       </ScanReveal>
 
-      <div className="grid grid-cols-12 gap-6">
-        <section className="col-span-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <section className="lg:col-span-8">
           <h2 className="text-mono text-[10px] tracking-system text-text-3 mb-4">
             OPEN DOSSIERS · {OPEN_DOSSIERS.length}
           </h2>
@@ -109,13 +109,13 @@ export default function NexusOverviewPage() {
                     transition-colors duration-200
                   "
                 >
-                  <div className="px-6 py-5 grid grid-cols-12 gap-4 items-center">
-                    <div className="col-span-2 text-mono text-[11px] tracking-system text-text-3 group-hover:text-signal transition-colors">
+                  <div className="px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div className="text-mono text-[11px] tracking-system text-text-3 group-hover:text-signal transition-colors sm:w-20 shrink-0">
                       {d.code}
                     </div>
 
-                    <div className="col-span-7">
-                      <div className="flex items-center gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                         <h3 className="font-display text-xl text-text-0">
                           {d.title}
                         </h3>
@@ -127,7 +127,7 @@ export default function NexusOverviewPage() {
                       </p>
                     </div>
 
-                    <div className="col-span-3 text-mono text-[10px] tracking-system text-right">
+                    <div className="text-mono text-[10px] tracking-system sm:text-right shrink-0">
                       <div className="text-text-3">
                         EVIDENCE <span className="text-text-1 tabular-nums">{d.evidence}</span>
                       </div>
@@ -144,7 +144,7 @@ export default function NexusOverviewPage() {
           </div>
         </section>
 
-        <aside className="col-span-4">
+        <aside className="lg:col-span-4">
           <h2 className="text-mono text-[10px] tracking-system text-text-3 mb-4">
             ACTIVITY · LAST 4H
           </h2>
