@@ -1,9 +1,7 @@
 import { SystemDock } from '@/components/system/SystemDock';
+import { KonamiCode } from '@/components/effects/KonamiCode';
+import { CursorTrace } from '@/components/effects/CursorTrace';
 
-/**
- * Layout for everything inside the "system" — i.e. after the user is past auth.
- * Adds the side dock for navigation between modules.
- */
 export default function SystemLayout({
   children,
 }: {
@@ -13,6 +11,8 @@ export default function SystemLayout({
     <div className="min-h-screen pt-6 pb-6 flex">
       <SystemDock />
       <div className="flex-1 pl-16 pr-6">{children}</div>
+      <KonamiCode />
+      <CursorTrace />
     </div>
   );
 }
