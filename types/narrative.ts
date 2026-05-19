@@ -10,6 +10,9 @@ export type Evidence = {
   summary: string;
   redacted?: boolean;
   content?: string;
+  imageUrl?: string;
+  audioUrl?: string;
+  transcript?: string;
 };
 
 export type TimelineEvent = {

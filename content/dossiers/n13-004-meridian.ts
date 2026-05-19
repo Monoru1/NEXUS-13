@@ -94,7 +94,7 @@ LOCATION AT TIME OF FILING: [withheld]`,
       title: 'Field interview — subject MERIDIAN',
       date: '2019-11-22T00:00:00Z',
       summary: `Interview conducted by AGENT-04. Subject denied incident.`,
-      content: `INTERVIEW TRANSCRIPT // 2019-11-22
+      transcript: `INTERVIEW TRANSCRIPT // 2019-11-22
 INTERVIEWER: AGENT-04
 SUBJECT: MERIDIAN
 LOCATION: [redacted]
@@ -227,6 +227,7 @@ REASON: CLOSED FILE PROTOCOL`,
       title: 'Reopening directive — 2024-08-14',
       date: '2024-08-14T00:00:00Z',
       summary: `Status and classification upgrade. Reason not documented. No authorising officer logged.`,
+      imageUrl: '/evidence/n13-004-casefile.svg',
       content: `[INTERNAL SYSTEM LOG // NEXUS CASE MANAGEMENT]
 TIMESTAMP: 2024-08-14 03:17:09Z
 

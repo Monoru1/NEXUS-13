@@ -24,6 +24,38 @@ const TYPE_LABEL: Record<Evidence['type'], string> = {
 function AudioPanel({ evidence }: { evidence: Evidence }) {
   const [playing, setPlaying] = useState(false);
 
+  if (evidence.audioUrl) {
+    return (
+      <div className="mt-3">
+        <div className="flex items-center gap-3 p-3 bg-void-2 border border-void-5">
+          {/* Waveform bars */}
+          <div className="flex-1 flex items-center gap-px h-6" aria-hidden>
+            {Array.from({ length: 48 }).map((_, i) => {
+              const h = Math.sin(i * 0.7 + 1.2) * 0.5 + 0.5;
+              return (
+                <div
+                  key={i}
+                  className="w-px bg-cipher"
+                  style={{ height: `${Math.max(4, h * 20)}px`, opacity: 0.6 }}
+                />
+              );
+            })}
+          </div>
+          <span className="text-mono text-[9px] text-cipher tracking-system shrink-0">
+            AUDIO AVAILABLE
+          </span>
+        </div>
+        <audio
+          controls
+          src={evidence.audioUrl}
+          className="w-full mt-2"
+          style={{ filter: 'invert(1) hue-rotate(90deg) brightness(0.7)', height: '28px' }}
+          aria-label={`Audio evidence: ${evidence.title}`}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="mt-3">
       <div className="flex items-center gap-3 p-3 bg-void-2 border border-void-5">
@@ -62,16 +94,35 @@ function AudioPanel({ evidence }: { evidence: Evidence }) {
         </span>
       </div>
       <p className="mt-1 text-mono text-[9px] text-text-3 tracking-system">
-        CLASSIFIED AUDIO — PLAYBACK STUB
+        CLASSIFIED AUDIO — PLAYBACK UNAVAILABLE AT THIS CLEARANCE
       </p>
     </div>
   );
 }
 
-function PhotoPanel() {
+function PhotoPanel({ evidence }: { evidence: Evidence }) {
+  if (evidence.imageUrl) {
+    return (
+      <div className="mt-3 relative border border-void-5 overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={evidence.imageUrl}
+          alt={evidence.title}
+          className="w-full h-auto block"
+          style={{ maxHeight: '240px', objectFit: 'cover' }}
+        />
+        <div
+          className="absolute top-2 right-2 px-1.5 py-0.5 bg-void-0 border border-warn/50"
+          aria-hidden
+        >
+          <span className="text-mono text-[8px] tracking-system text-warn">CLASSIFIED</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-3 relative bg-void-3 border border-void-5 h-32 flex items-center justify-center overflow-hidden">
-      {/* Grid texture */}
       <div className="absolute inset-0 nexus-grid-bg opacity-40" aria-hidden />
       <div className="relative z-10 text-center">
         <div className="text-mono text-[9px] tracking-system text-text-3 mb-1">
@@ -101,8 +152,17 @@ function LogPanel({ content }: { content: string }) {
   );
 }
 
-function DocumentPanel({ content, redacted }: { content?: string; redacted?: boolean }) {
-  if (!content && !redacted) return null;
+function DocumentPanel({
+  content,
+  redacted,
+  transcript,
+}: {
+  content?: string;
+  redacted?: boolean;
+  transcript?: string;
+}) {
+  const body = transcript ?? content;
+  if (!body && !redacted) return null;
   return (
     <div className="mt-3 bg-void-1 border border-void-4 border-l-2 border-l-text-3 p-4">
       {redacted ? (
@@ -117,7 +177,7 @@ function DocumentPanel({ content, redacted }: { content?: string; redacted?: boo
         </div>
       ) : (
         <p className="text-[12px] text-text-2 leading-relaxed font-serif-italic whitespace-pre-line">
-          {content}
+          {body}
         </p>
       )}
     </div>
@@ -137,6 +197,7 @@ export function EvidencePanel({ evidence, onView, viewed, index }: Props) {
     evidence.type === 'audio' ||
     evidence.type === 'photo' ||
     evidence.content ||
+    evidence.transcript ||
     evidence.redacted;
 
   return (
@@ -213,7 +274,7 @@ export function EvidencePanel({ evidence, onView, viewed, index }: Props) {
                 {evidence.type === 'audio' && (
                   <AudioPanel evidence={evidence} />
                 )}
-                {evidence.type === 'photo' && <PhotoPanel />}
+                {evidence.type === 'photo' && <PhotoPanel evidence={evidence} />}
                 {evidence.type === 'log' && evidence.content && (
                   <LogPanel content={evidence.content} />
                 )}
@@ -221,6 +282,7 @@ export function EvidencePanel({ evidence, onView, viewed, index }: Props) {
                   <DocumentPanel
                     content={evidence.content}
                     redacted={evidence.redacted}
+                    transcript={evidence.transcript}
                   />
                 )}
               </div>

@@ -108,6 +108,7 @@ Fourteen months later, a signals intercept in Tallinn placed the subject's voice
       date: '2019-04-14T11:22:00Z',
       summary: `Single frame from crematorium reception CCTV. The woman identifying herself as Elena Vasic. Face partially obscured by collar. No match returned by facial recognition against any known database. Image resolution is consistent with deliberate positioning relative to the camera.`,
       redacted: false,
+      imageUrl: '/evidence/n13-001-photo-surveillance.svg',
     },
     {
       id: 'evid-tallinn-recording',
@@ -185,6 +186,7 @@ Recommendation: [REDACTED // 13.4-CTRL]`,
       date: '2019-04-12T00:00:00Z',
       summary: `The identification document upon which the entire Istanbul death determination rests. Prepared by Dr. A. Cartwright, independent contractor. Dr. Cartwright died February 2020. His original working notes were not preserved. This document is the only record of his findings.`,
       redacted: true,
+      imageUrl: '/evidence/n13-001-doc-autopsy.svg',
     },
     {
       id: 'evid-loom-transfer',

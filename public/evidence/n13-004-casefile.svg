@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <rect width="640" height="360" fill="#0a0a0e"/>
+  <!-- Document -->
+  <rect x="30" y="15" width="580" height="330" fill="#0c0c0f" stroke="#2e2e35" stroke-width="1"/>
+  <!-- Top classification bar -->
+  <rect x="30" y="15" width="580" height="5" fill="#ffb020" opacity="0.5"/>
+  <!-- Header -->
+  <text x="50" y="40" font-family="monospace" font-size="9" fill="#ffb020" letter-spacing="3">SECRET // MERIDIAN · CASE FILE · CLOSURE REPORT</text>
+  <line x1="50" y1="48" x2="590" y2="48" stroke="#2e2e35" stroke-width="1"/>
+  <!-- Case metadata -->
+  <text x="50" y="64" font-family="monospace" font-size="8" fill="#56565a">CASE: N13-004 · STATUS: CLOSED · DATE: 2023-01-30T16:00:00Z</text>
+  <text x="50" y="76" font-family="monospace" font-size="8" fill="#56565a">AUTHORISED BY: CTRL-PRIME-7 · CLASSIFICATION: SECRET</text>
+  <line x1="50" y1="84" x2="590" y2="84" stroke="#1a1a1e" stroke-width="1"/>
+  <!-- Body -->
+  <text x="50" y="100" font-family="monospace" font-size="8" fill="#a0a0a4">CASE SUMMARY:</text>
+  <text x="50" y="116" font-family="monospace" font-size="8" fill="#8a8a86">Subject MERIDIAN terminated active monitoring 2023-01-30</text>
+  <text x="50" y="130" font-family="monospace" font-size="8" fill="#8a8a86">following conclusion of Operation LOOKING GLASS. All</text>
+  <text x="50" y="144" font-family="monospace" font-size="8" fill="#8a8a86">surveillance assets redeployed. Case sealed per directive.</text>
+  <line x1="50" y1="154" x2="590" y2="154" stroke="#1a1a1e" stroke-width="1"/>
+  <!-- Anomaly entry — audit log -->
+  <rect x="50" y="162" width="540" height="72" fill="#ffb02008" stroke="#ffb020" stroke-width="0.5"/>
+  <text x="62" y="178" font-family="monospace" font-size="8" fill="#ffb020" letter-spacing="1">!! AUDIT LOG ANOMALY — DETECTED 2024-08-14</text>
+  <text x="62" y="194" font-family="monospace" font-size="8" fill="#a0a0a4">2024-08-14T02:09:31Z — Query: OPEN N13-004</text>
+  <text x="62" y="208" font-family="monospace" font-size="8" fill="#a0a0a4">Operator ID: [NULL] · Terminal: UNREGISTERED · Auth: BYPASSED</text>
+  <text x="62" y="222" font-family="monospace" font-size="8" fill="#56565a">No authorising officer logged. Session origin: UNKNOWN.</text>
+  <!-- Evidence section -->
+  <line x1="50" y1="242" x2="590" y2="242" stroke="#1a1a1e" stroke-width="1"/>
+  <text x="50" y="258" font-family="monospace" font-size="8" fill="#a0a0a4">EVIDENCE ON FILE: 23 ITEMS</text>
+  <text x="50" y="272" font-family="monospace" font-size="8" fill="#56565a">ITEMS 1-8: DECLASSIFIED · ITEMS 9-23:</text>
+  <rect x="278" y="264" width="160" height="10" fill="#0c0c0f" stroke="#ffb020" stroke-width="0.5" opacity="0.8"/>
+  <text x="286" y="272" font-family="monospace" font-size="7" fill="#ffb020" opacity="0.7">RECLASSIFIED TOP SECRET</text>
+  <!-- Footer -->
+  <line x1="50" y1="296" x2="590" y2="296" stroke="#1a1a1e" stroke-width="1"/>
+  <text x="50" y="312" font-family="monospace" font-size="8" fill="#56565a">NOTE: Reclassification to TOP SECRET occurred 2024-08-15 — ONE DAY AFTER THE ANONYMOUS QUERY.</text>
+  <text x="50" y="326" font-family="monospace" font-size="7" fill="#56565a" opacity="0.5">This discrepancy has not been formally investigated.</text>
+  <!-- Bottom classification bar -->
+  <rect x="30" y="340" width="580" height="5" fill="#ffb020" opacity="0.5"/>
+  <!-- Stamp -->
+  <rect x="440" y="280" width="130" height="44" fill="none" stroke="#ffb020" stroke-width="1.5" opacity="0.3" transform="rotate(-5 505 302)"/>
+  <text x="448" y="300" font-family="monospace" font-size="10" fill="#ffb020" opacity="0.25" transform="rotate(-5 505 302)" letter-spacing="2">REOPENED</text>
+  <text x="453" y="313" font-family="monospace" font-size="7" fill="#ffb020" opacity="0.25" transform="rotate(-5 505 302)">2024-08-14 · UNAUTH.</text>
+</svg>
