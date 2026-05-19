@@ -1,12 +1,7 @@
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import { ScanReveal } from '@/components/primitives/ScanReveal';
 import { ClassificationTag } from '@/components/primitives/ClassificationTag';
-
-const ArchivesProjection = dynamic(
-  () => import('@/components/projections/ArchivesProjection').then((m) => ({ default: m.ArchivesProjection })),
-  { ssr: false },
-);
+import { ArchivesProjectionClient } from '@/components/projections/ArchivesProjectionClient';
 
 export const revalidate = 3600;
 
@@ -62,7 +57,7 @@ export default function ArchivesPage() {
     <div className="max-w-7xl">
       {/* 3D Projection hero */}
       <div className="border border-void-4 border-b-0">
-        <ArchivesProjection />
+        <ArchivesProjectionClient />
       </div>
 
       <div className="py-10">

@@ -1,12 +1,7 @@
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import { ScanReveal } from '@/components/primitives/ScanReveal';
 import { ClassificationTag } from '@/components/primitives/ClassificationTag';
-
-const NexusProjection = dynamic(
-  () => import('@/components/projections/NexusProjection').then((m) => ({ default: m.NexusProjection })),
-  { ssr: false },
-);
+import { NexusProjectionClient } from '@/components/projections/NexusProjectionClient';
 
 export const revalidate = 3600;
 
@@ -77,7 +72,7 @@ export default function NexusOverviewPage() {
     <div className="max-w-7xl">
       {/* 3D Projection hero */}
       <div className="mb-0 border border-void-4 border-b-0">
-        <NexusProjection />
+        <NexusProjectionClient />
       </div>
 
       <div className="py-6 lg:py-10">
