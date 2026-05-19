@@ -1,7 +1,15 @@
 # NEXUS//13 — Session Status
 
-**Last updated:** 2026-05-18  
+**Last updated:** 2026-05-19  
 **Branch:** `claude/setup-project-verification-ZSh4Z`
+
+---
+
+## Current state
+
+- `npm install` — clean, no flags required (`next` 15.0.3 → 15.5.18)
+- `npm run typecheck` — clean
+- `npm run build` — clean, zero warnings
 
 ---
 
@@ -11,23 +19,31 @@
 - Boot sequence, dashboard, design system, all shell components
 - Fixed: Turbopack + typedRoutes incompatibility
 - Fixed: Font @imports ordering in Tailwind v4 (moved to layout `<head>`)
-- All 14 Phase 2 files — see PR #1 for full list
+- All 14 Phase 2 files — see PR #1
 
-### Session 2 — Repo hygiene (3 commits)
+### Session 2 — Repo hygiene
+| Fix | Commit |
+|---|---|
+| Peer deps | `fix(deps)` — bumped next 15.0.3 → 15.5.18, migrated themeColor to viewport |
+| Lockfile | `chore` — regenerated from scratch |
+| SystemDock | `fix(dock)` — active state logic verified correct, added aria-current |
 
-| Fix | Commit | Detail |
-|---|---|---|
-| Peer deps | `fix(deps)` | Bumped `next` 15.0.3 → 15.5.18 (first stable with `^19.0.0` peer dep). `npm install` now clean without flags. Also migrated `themeColor` from `metadata` to `viewport` export (required in 15.3+). |
-| Lockfile | `chore` | Regenerated `package-lock.json` from scratch against 15.5.18. lockfileVersion 3. |
-| SystemDock | `fix(dock)` | Active state logic `pathname.startsWith(mod.href + '/')` was already correct. Added `aria-current="page"` and `aria-label` for accessibility. |
+### Session 3 — Phase 2.5 (polish)
 
----
+**Bloc A** — already done in Session 2. Confirmed clean.
 
-## Current state
+**Bloc B — Loading states + 404**
 
-- `npm install` — clean, no flags required
-- `npm run typecheck` — clean
-- `npm run build` — clean, no warnings
+| File | Description |
+|---|---|
+| `app/(system)/archives/loading.tsx` | 4-row skeleton matching list layout: code column, title+classification+status bars, date column, evidence/contradiction counts. Opacity tapers per row (1.0 → 0.64). `pulse-signal` animation. |
+| `app/(system)/archives/[slug]/loading.tsx` | Full dossier skeleton: header (two-panel metadata grid), left column (summary bars, 3 timeline events, 3 evidence cards), right column (clearance meter, subject card, audit log). Structurally mirrors real layout to avoid CLS on load. |
+| `app/not-found.tsx` | Terminal-style 404. Agency index query that returned nothing. Three lines of serif-italic ambiguity: "THIS RESOURCE DOES NOT EXIST. / OR DOES NOT EXIST YET. / OR HAS BEEN REDACTED." Return button uses auth-panel style (signal border). No glitch animation. |
+
+**Bloc C — ARIADNE prose audit**
+
+Checked for: `mysterious`, `strange`, `inexplicable`, `unexplained`, `mysteriously`.  
+**Result: 0 occurrences.** Prose register already clean — facts described soberly, mystery emerges from juxtaposition. No rewrite needed. Commit skipped per brief.
 
 ---
 
@@ -38,12 +54,14 @@
 
 ---
 
-## Next file to write
+## Next: Phase 3a (Terminal)
 
-If continuing Phase 2 polish:
-- `app/(system)/layout.tsx` — add `loading.tsx` skeleton states for archives routes
-- Extract dossier card into a shared `DossierCard` component (currently duplicated between `nexus/page.tsx` and `archives/page.tsx`)
+Branch: `claude/phase-3-terminal` (create from main once PR#1 merged)
 
-If starting Phase 3:
-- `app/(system)/graph/page.tsx` — Three.js subject relationship network
-- `app/(system)/terminal/page.tsx` — interactive terminal with NEXUS command set
+Files:
+1. `lib/terminal/parser.ts`
+2. `lib/terminal/commands.ts`
+3. `lib/store/terminal.ts`
+4. `components/terminal/TerminalLine.tsx`
+5. `components/terminal/TerminalInput.tsx`
+6. `app/(system)/terminal/page.tsx`
