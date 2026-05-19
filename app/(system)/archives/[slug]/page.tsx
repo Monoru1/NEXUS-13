@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 import { ScanReveal } from '@/components/primitives/ScanReveal';
 import { DossierHeader } from '@/components/dossier/DossierHeader';
@@ -11,16 +10,12 @@ import { SubjectCard } from '@/components/dossier/SubjectCard';
 import { DataLine } from '@/components/primitives/DataLine';
 import { useNarrativeStore } from '@/lib/store/narrative';
 import { ScrollProgress } from '@/components/effects/ScrollProgress';
+import { DossierProjectionClient } from '@/components/dossier/DossierProjectionClient';
 import { ARIADNE } from '@/content/dossiers/n13-001-ariadne';
 import { VESPER } from '@/content/dossiers/n13-002-vesper';
 import { KAIROS } from '@/content/dossiers/n13-003-kairos';
 import { MERIDIAN } from '@/content/dossiers/n13-004-meridian';
 import type { Dossier } from '@/types/narrative';
-
-const DossierProjection = dynamic(
-  () => import('@/components/dossier/DossierProjection').then((m) => ({ default: m.DossierProjection })),
-  { ssr: false },
-);
 
 const DOSSIERS: Record<string, Dossier> = {
   'n13-001-ariadne': ARIADNE,
@@ -194,7 +189,7 @@ export default function DossierPage() {
 
           {/* 3D projection — desktop only, lazy-loaded */}
           <ScanReveal delay={400}>
-            <DossierProjection dossier={dossier} />
+            <DossierProjectionClient dossier={dossier} />
           </ScanReveal>
 
           {/* Classification audit log */}
