@@ -1,5 +1,7 @@
 import { ARIADNE } from '@/content/dossiers/n13-001-ariadne';
-import { VESPER, KAIROS, MERIDIAN } from '@/content/dossiers/_stubs';
+import { VESPER } from '@/content/dossiers/n13-002-vesper';
+import { KAIROS } from '@/content/dossiers/n13-003-kairos';
+import { MERIDIAN } from '@/content/dossiers/n13-004-meridian';
 import type { Dossier } from '@/types/narrative';
 
 export type GraphNode = {

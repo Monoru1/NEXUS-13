@@ -10,10 +10,16 @@ import { SubjectCard } from '@/components/dossier/SubjectCard';
 import { DataLine } from '@/components/primitives/DataLine';
 import { useNarrativeStore } from '@/lib/store/narrative';
 import { ARIADNE } from '@/content/dossiers/n13-001-ariadne';
+import { VESPER } from '@/content/dossiers/n13-002-vesper';
+import { KAIROS } from '@/content/dossiers/n13-003-kairos';
+import { MERIDIAN } from '@/content/dossiers/n13-004-meridian';
 import type { Dossier } from '@/types/narrative';
 
 const DOSSIERS: Record<string, Dossier> = {
   'n13-001-ariadne': ARIADNE,
+  'n13-002-vesper': VESPER,
+  'n13-003-kairos': KAIROS,
+  'n13-004-meridian': MERIDIAN,
 };
 
 export default function DossierPage() {
