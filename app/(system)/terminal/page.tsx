@@ -1,7 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useCallback, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+
+const TerminalProjection = dynamic(
+  () => import('@/components/projections/TerminalProjection').then((m) => ({ default: m.TerminalProjection })),
+  { ssr: false },
+);
 import { useTerminalStore } from '@/lib/store/terminal';
 import { TerminalLine } from '@/components/terminal/TerminalLine';
 import { TerminalInput } from '@/components/terminal/TerminalInput';
@@ -51,11 +57,17 @@ export default function TerminalPage() {
   );
 
   return (
-    <div
-      ref={containerRef}
-      className="flex flex-col bg-void-1 border border-void-4 cursor-text"
-      style={{ height: 'calc(100vh - 3rem)' }}
-    >
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 3rem)' }}>
+      {/* 3D Projection banner */}
+      <div className="shrink-0 border border-void-4 border-b-0">
+        <TerminalProjection />
+      </div>
+
+      {/* Terminal shell */}
+      <div
+        ref={containerRef}
+        className="flex-1 flex flex-col bg-void-1 border border-void-4 cursor-text min-h-0"
+      >
       {/* Header */}
       <div className="shrink-0 px-4 py-2 border-b border-void-4 flex items-center justify-between bg-void-0">
         <span className="text-mono text-[10px] tracking-system text-text-3">
@@ -98,6 +110,7 @@ export default function TerminalPage() {
           <span className="text-mono text-[13px] text-text-3 pulse-signal">█</span>
         </div>
       )}
+      </div>
     </div>
   );
 }

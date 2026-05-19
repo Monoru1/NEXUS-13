@@ -1,8 +1,14 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { TRANSMISSIONS } from '@/content/transmissions/index';
 import { TransmissionRow } from '@/components/transmissions/TransmissionRow';
+
+const TransmissionsProjection = dynamic(
+  () => import('@/components/projections/TransmissionsProjection').then((m) => ({ default: m.TransmissionsProjection })),
+  { ssr: false },
+);
 
 type FilterValue = 'ALL' | 'ANOMALOUS' | 'DECRYPTED' | 'PENDING';
 
@@ -33,6 +39,12 @@ export default function TransmissionsPage() {
       className="min-h-screen"
       style={{ background: '#060607', fontFamily: 'var(--font-mono, monospace)' }}
     >
+      {/* 3D Projection hero */}
+      <TransmissionsProjection
+        transmissionCount={TRANSMISSIONS.length}
+        anomalousCount={anomalousCount}
+      />
+
       {/* Page header */}
       <div
         className="flex items-start justify-between px-6 py-4 border-b"

@@ -1,10 +1,16 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { getAllSubjects } from '@/lib/subjects/query';
 import { SubjectRow } from '@/components/subjects/SubjectRow';
 import { SubjectFilters } from '@/components/subjects/SubjectFilters';
 import type { Subject } from '@/types/narrative';
+
+const SubjectsProjection = dynamic(
+  () => import('@/components/projections/SubjectsProjection').then((m) => ({ default: m.SubjectsProjection })),
+  { ssr: false },
+);
 
 type FilterValue = Subject['status'] | 'ALL';
 
@@ -50,6 +56,9 @@ export default function SubjectsPage() {
       className="min-h-screen"
       style={{ background: '#060607', fontFamily: 'var(--font-mono, monospace)' }}
     >
+      {/* 3D Projection hero */}
+      <SubjectsProjection subjectCount={allSubjects.length} />
+
       {/* Page header */}
       <div
         className="flex items-center justify-between px-6 py-4 border-b"
