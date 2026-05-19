@@ -9,11 +9,18 @@ import { EvidencePanel } from '@/components/dossier/EvidencePanel';
 import { SubjectCard } from '@/components/dossier/SubjectCard';
 import { DataLine } from '@/components/primitives/DataLine';
 import { useNarrativeStore } from '@/lib/store/narrative';
+import { ScrollProgress } from '@/components/effects/ScrollProgress';
 import { ARIADNE } from '@/content/dossiers/n13-001-ariadne';
+import { VESPER } from '@/content/dossiers/n13-002-vesper';
+import { KAIROS } from '@/content/dossiers/n13-003-kairos';
+import { MERIDIAN } from '@/content/dossiers/n13-004-meridian';
 import type { Dossier } from '@/types/narrative';
 
 const DOSSIERS: Record<string, Dossier> = {
   'n13-001-ariadne': ARIADNE,
+  'n13-002-vesper': VESPER,
+  'n13-003-kairos': KAIROS,
+  'n13-004-meridian': MERIDIAN,
 };
 
 export default function DossierPage() {
@@ -53,6 +60,7 @@ export default function DossierPage() {
 
   return (
     <div className="py-10 max-w-7xl">
+      <ScrollProgress />
       {/* Breadcrumb */}
       <ScanReveal>
         <nav className="mb-6 text-mono text-[10px] tracking-system text-text-3" aria-label="Breadcrumb">

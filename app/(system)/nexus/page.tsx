@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ScanReveal } from '@/components/primitives/ScanReveal';
 import { ClassificationTag } from '@/components/primitives/ClassificationTag';
 
+export const revalidate = 3600;
+
 const RECENT_ACTIVITY = [
   { ts: '03:14:22Z', code: 'N13-001', event: 'Subject ARIADNE — location update', tone: 'signal' },
   { ts: '02:58:11Z', code: 'N13-004', event: 'Document declassified by operator UNKNOWN', tone: 'warn' },

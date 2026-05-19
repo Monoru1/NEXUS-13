@@ -1,18 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { setAudioEnabled, getAudioEnabled } from '@/lib/audio/ui-sounds';
+import { startAmbient, stopAmbient } from '@/lib/audio/ambient-engine';
 
-/**
- * Persistent status bar — bottom-right corner.
- * Shows real-time UTC, a session ID (anonymous), and a fake signal strength.
- * This is what makes the user feel watched without ever stating it.
- */
 export function StatusBar() {
   const [utc, setUtc] = useState('--:--:--');
   const [sessionId, setSessionId] = useState('────-────-────');
   const [signal, setSignal] = useState(3);
+  const [audioOn, setAudioOn] = useState(false);
 
   useEffect(() => {
+    setAudioOn(getAudioEnabled());
+
     const id = Array.from({ length: 3 }, () =>
       Math.random().toString(36).slice(2, 6),
     ).join('-').toUpperCase();
@@ -38,6 +38,17 @@ export function StatusBar() {
     };
   }, []);
 
+  const toggleAudio = useCallback(() => {
+    const next = !audioOn;
+    setAudioOn(next);
+    setAudioEnabled(next);
+    if (next) {
+      startAmbient();
+    } else {
+      stopAmbient();
+    }
+  }, [audioOn]);
+
   return (
     <div
       className="
@@ -46,7 +57,7 @@ export function StatusBar() {
         text-[10px] tracking-system text-mono text-text-2
         border-t border-l border-void-4 bg-void-1/80 backdrop-blur-sm
       "
-      aria-hidden="true"
+      aria-label="System status bar"
     >
       <span>
         <span className="text-text-3">UTC</span>{' '}
@@ -76,6 +87,21 @@ export function StatusBar() {
           ))}
         </span>
       </span>
+
+      <span className="text-void-5">|</span>
+
+      <button
+        onClick={toggleAudio}
+        className={`
+          text-[9px] tracking-system transition-colors duration-200
+          focus-visible:outline focus-visible:outline-1 focus-visible:outline-signal
+          ${audioOn ? 'text-signal hover:text-signal/70' : 'text-text-3 hover:text-text-2'}
+        `}
+        aria-label={audioOn ? 'Disable ambient audio' : 'Enable ambient audio'}
+        title={audioOn ? 'AUDIO ON — click to disable' : 'AUDIO OFF — click to enable'}
+      >
+        {audioOn ? 'AUDIO ■' : 'AUDIO ○'}
+      </button>
     </div>
   );
 }

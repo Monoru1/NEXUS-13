@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ScanReveal } from '@/components/primitives/ScanReveal';
 import { ClassificationTag } from '@/components/primitives/ClassificationTag';
 
+export const revalidate = 3600;
+
 const ALL_DOSSIERS = [
   {
     slug: 'n13-001-ariadne',

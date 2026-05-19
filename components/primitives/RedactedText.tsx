@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 type Props = {
   children: React.ReactNode;
@@ -9,14 +9,22 @@ type Props = {
 
 export function RedactedText({ children, className = '' }: Props) {
   const [revealed, setRevealed] = useState(false);
+  const [glitching, setGlitching] = useState(false);
+
+  const handleReveal = useCallback(() => {
+    setGlitching(true);
+    setTimeout(() => {
+      setGlitching(false);
+      setRevealed(true);
+    }, 320);
+  }, []);
 
   return (
     <span className={`relative inline-block group ${className}`}>
       <span
-        className={`
-          transition-opacity duration-200
-          ${revealed ? 'opacity-100' : 'opacity-0 select-none pointer-events-none'}
-        `}
+        className={`transition-opacity duration-200 ${
+          revealed ? 'opacity-100' : 'opacity-0 select-none pointer-events-none'
+        }`}
         aria-hidden={!revealed}
       >
         {children}
@@ -24,23 +32,25 @@ export function RedactedText({ children, className = '' }: Props) {
 
       {!revealed && (
         <span
-          className="
-            absolute inset-0
-            bg-redacted border border-void-5
-            cursor-pointer
-          "
-          aria-label="REDACTED — click to reveal restriction notice"
+          className={`
+            absolute inset-0 cursor-pointer
+            border border-void-5
+            transition-all duration-120
+            group-hover:border-void-4 group-hover:brightness-125
+            ${glitching ? 'bg-alert/20 animate-pulse' : 'bg-redacted'}
+          `}
+          aria-label="REDACTED — click to attempt access"
           role="button"
           tabIndex={0}
-          onClick={() => setRevealed(true)}
-          onKeyDown={(e) => e.key === 'Enter' && setRevealed(true)}
+          onClick={handleReveal}
+          onKeyDown={(e) => e.key === 'Enter' && handleReveal()}
         />
       )}
 
       {!revealed && (
         <span
           className="
-            absolute bottom-full left-0 mb-1
+            absolute bottom-full left-0 mb-1.5
             px-2 py-1
             bg-void-3 border border-void-5
             text-mono text-[9px] tracking-system text-alert

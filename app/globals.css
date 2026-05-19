@@ -30,7 +30,7 @@
 
   /* Typography — distinctive, non-Inter */
   --font-display: 'General Sans', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-mono: var(--font-geist-mono, 'Geist Mono'), ui-monospace, monospace;
   --font-serif: 'Instrument Serif', ui-serif, serif;
 
   /* Motion — Cold Protocol */
@@ -190,4 +190,41 @@ button, a, [role='button'] {
 *:focus-visible {
   outline: 1px solid var(--color-signal);
   outline-offset: 2px;
+}
+
+/* Card hover — subtle inner light, no bloom */
+.card-hover {
+  transition: border-color 200ms var(--ease-protocol),
+              background-color 200ms var(--ease-protocol);
+}
+.card-hover:hover {
+  border-color: var(--color-void-5);
+  background-color: var(--color-void-2);
+}
+
+/* Link underline — draws in from left */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 200ms var(--ease-protocol);
+}
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* TOP SECRET classification pulse */
+@keyframes classification-pulse {
+  0%, 100% { background-color: var(--color-alert); color: var(--color-void-0); }
+  50% { background-color: color-mix(in srgb, var(--color-alert) 60%, transparent); }
+}
+.classification-top-secret {
+  animation: classification-pulse 3s var(--ease-protocol) infinite;
 }
