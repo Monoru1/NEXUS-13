@@ -1,7 +1,7 @@
 # NEXUS//13 — Session Status
 
 **Last updated:** 2026-05-19  
-**Branch:** `claude/phase-3-terminal`
+**Branch:** `claude/phase-3-graph`
 
 ---
 
@@ -10,50 +10,48 @@
 - `npm install` — clean, no flags
 - `npm run typecheck` — clean
 - `npm run build` — clean, zero warnings
-- Routes: `/` `/nexus` `/archives` `/archives/[slug]` `/terminal` `/_not-found`
+- Routes: `/` `/nexus` `/archives` `/archives/[slug]` `/terminal` `/nexus-graph` `/_not-found`
 
 ---
 
-## Phase 3a — Terminal (this session)
+## Phase 3b — Three.js Graph (this session)
 
 ### Commits
 
 | Commit | File(s) |
 |---|---|
-| `feat(terminal): command parser` | `lib/terminal/types.ts`, `lib/terminal/parser.ts` |
-| `feat(terminal): command registry` | `lib/terminal/commands.ts` |
-| `feat(terminal): zustand store` | `lib/store/terminal.ts` |
-| `feat(terminal): TerminalInput` | `components/terminal/TerminalInput.tsx` |
-| `feat(terminal): TerminalLine` | `components/terminal/TerminalLine.tsx` |
-| `feat(terminal): page` | `app/(system)/terminal/page.tsx` |
-| `feat(terminal): time-gated easter egg` | `app/(system)/terminal/loading.tsx` |
-| `chore(deploy): Vercel + Netlify config` | `vercel.json`, `netlify.toml` |
+| `chore(deps)`: three + R3F + drei | `package.json` |
+| `feat(content)`: dossier stubs | `content/dossiers/_stubs.ts` |
+| `feat(graph)`: topology builder | `lib/graph/topology.ts` |
+| `feat(graph)`: zustand store | `lib/store/graph.ts` |
+| `feat(graph)`: Node + Edge components | `components/graph/Node.tsx`, `components/graph/Edge.tsx` |
+| `feat(graph)`: Scene + OrbitControls | `components/graph/Scene.tsx` |
+| `feat(graph)`: InspectorPanel | `components/graph/InspectorPanel.tsx` |
+| `feat(graph)`: GraphLegend + page | `components/graph/GraphLegend.tsx`, `app/(system)/nexus-graph/page.tsx` |
+| `feat(graph)`: mobile guard + loading | `app/(system)/nexus-graph/loading.tsx` |
+| `feat(graph)`: camera transitions | updated `Scene.tsx`, `InspectorPanel.tsx`, `lib/store/graph.ts` |
 
-### Documented commands (type `help`)
-```
-help                   show this message
-ls dossiers            list active dossiers
-cat dossier <id>       read dossier summary
-subjects               list known subjects
-whoami                 identify operator
-clear                  clear terminal output
-exit                   terminate session
-nexus                  navigate to overview
-```
+### Architecture
 
-### Hidden commands (not in `help`)
 ```
-sudo           "you are already operating beyond clearance."
-13.4-ctrl      BACKDOOR ECHO. WHO TOLD YOU. + hard-glitch effect
-find ariadne   time-gated (22:00–04:59 local): 6-line transcript fragment
-               outside window: SEARCH WINDOW CLOSED. RETRY DURING NIGHT WATCH.
+lib/graph/topology.ts     — buildGraph(): subjects (inner sphere r=2.4) + dossiers (outer r=4.5)
+lib/store/graph.ts        — hoveredNodeId, selectedNodeId, cameraTarget
+components/graph/
+  Node.tsx                — sphere, emissive on hover, Html label
+  Edge.tsx                — Line from drei, per-kind color/opacity
+  Scene.tsx               — Canvas + OrbitControls + CameraController
+  InspectorPanel.tsx      — right overlay, connected node navigation
+  GraphLegend.tsx         — bottom-left 4-entry legend
+app/(system)/nexus-graph/
+  page.tsx                — full layout: canvas + overlays + mobile guard
+  loading.tsx             — skeleton matching page layout
 ```
 
 ### Quality bar verdict
 
-A senior dev who opens `/terminal` and types `sudo` gets a serif response that makes them smile. `13.4-ctrl` glitches the screen. `find ariadne` at 2am returns a real-feeling transcript fragment with a redacted audio window and a quote that sounds like it was recorded before the subject was declared dead.
+Open `/nexus-graph` — scene loads without white flash. Rotate the camera with the mouse. Nodes glow on hover. Click a node — InspectorPanel shows codename, status, summary, and a list of connected nodes. Click a connected node — camera flies (800ms ease-protocol) toward that node's position. Contradiction edges glow amber. Legend bottom-left. Counter top-right.
 
-The terminal refuses to close (`exit` is not the user's exit to take). It's not a terminal that looks like a terminal — it behaves like one.
+On mobile (<768px): `NEXUS GRAPH REQUIRES DESKTOP CONSOLE. // VIEWPORT TOO NARROW.`
 
 ---
 
@@ -83,17 +81,17 @@ Peer deps fix (next 15.0.3 → 15.5.18), lockfile, SystemDock aria fix.
 ### Session 3 — Phase 2.5
 Loading skeletons (archives, dossier), 404 page in-universe, ARIADNE prose audit (0 lazy words found).
 
+### Session 4 — Phase 3a Terminal
+Terminal page, command parser, registry (hidden: sudo, 13.4-ctrl, find ariadne), Zustand store, loading easter egg, Vercel + Netlify deploy config.
+
 ---
 
-## Next: Phase 3b (Three.js Graph)
+## Next: Phase 4 (Supabase telemetry + audio engine)
 
-Branch: `claude/phase-3-graph` from main once Phase 3a is merged.
-See CLAUDE.md §Prompt #3 for full spec.
+Branch: `claude/phase-4-data` from main once Phase 3b is merged.
 
-Key files:
-- `lib/graph/topology.ts` — fibonacci sphere layout
-- `components/graph/Scene.tsx` — R3F canvas with OrbitControls
-- `components/graph/Node.tsx` / `Edge.tsx`
-- `lib/store/graph.ts`
-- `components/graph/InspectorPanel.tsx`
-- `app/(system)/nexus-graph/page.tsx`
+Key items:
+- Supabase anon key + project URL (env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
+- Fake realtime activity feed on `/nexus` dashboard
+- Audio engine for ARIADNE evidence items
+- Operator telemetry (anonymous, opt-out in KAIROS dossier easter egg)
