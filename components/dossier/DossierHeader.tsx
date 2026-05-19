@@ -27,45 +27,42 @@ export function DossierHeader({ dossier, clearance }: Props) {
 
   return (
     <header className="border border-void-4 bg-void-1 mb-0">
-      <div className="px-6 py-4 border-b border-void-4 flex items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <span className="text-mono text-[10px] tracking-system text-text-3">
+      {/* Title row — stacks on mobile */}
+      <div className="px-4 sm:px-6 py-4 border-b border-void-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex flex-wrap items-baseline gap-3">
+          <span className="text-mono text-[10px] tracking-system text-text-3 shrink-0">
             {dossier.code}
           </span>
-          <h1 className="font-display text-3xl font-medium text-text-0 tracking-tight">
+          <h1 className="font-display text-2xl sm:text-3xl font-medium text-text-0 tracking-tight">
             {dossier.title}
           </h1>
-          <ClassificationTag level={dossier.classification} />
-          <ClassificationTag level={dossier.status} variant="status" />
+          <div className="flex items-center gap-2">
+            <ClassificationTag level={dossier.classification} />
+            <ClassificationTag level={dossier.status} variant="status" />
+          </div>
         </div>
 
-        <div className="flex items-center gap-3 text-mono text-[10px] tracking-system">
+        <div className="flex items-center gap-3 text-mono text-[10px] tracking-system shrink-0">
           <span className="text-text-3">CLEARANCE</span>
           <span className="text-signal tabular-nums text-lg">L-{clearance}</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 divide-x divide-void-4">
-        <div className="px-6 py-4">
+      {/* Metadata grid — stacks on mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:divide-x divide-void-4">
+        <div className="px-4 sm:px-6 py-4 border-b sm:border-b-0 border-void-4">
           <p className="text-mono text-[9px] tracking-system text-text-3 mb-3">
             FILE METADATA
           </p>
           <DataLine label="FILE CODE" value={dossier.code} />
           <DataLine label="OPENED" value={opened} />
-          <DataLine
-            label="STATUS"
-            value={dossier.status}
-            tone={statusTone}
-          />
+          <DataLine label="STATUS" value={dossier.status} tone={statusTone} />
           <DataLine
             label="CLASSIFICATION"
             value={dossier.classification}
             tone={dossier.classification === 'TOP SECRET' ? 'alert' : 'warn'}
           />
-          <DataLine
-            label="EVIDENCE ITEMS"
-            value={dossier.evidence.length}
-          />
+          <DataLine label="EVIDENCE ITEMS" value={dossier.evidence.length} />
           <DataLine
             label="CONTRADICTIONS"
             value={dossier.contradictions.length}
@@ -73,22 +70,14 @@ export function DossierHeader({ dossier, clearance }: Props) {
           />
         </div>
 
-        <div className="px-6 py-4">
+        <div className="px-4 sm:px-6 py-4">
           <p className="text-mono text-[9px] tracking-system text-text-3 mb-3">
             PRIMARY SUBJECT
           </p>
-          <DataLine
-            label="CODENAME"
-            value={dossier.primarySubject.codename}
-            tone="signal"
-          />
-          <DataLine
-            label="STATUS"
-            value={dossier.primarySubject.status}
-            tone={subjectStatusTone}
-          />
+          <DataLine label="CODENAME" value={dossier.primarySubject.codename} tone="signal" />
+          <DataLine label="STATUS" value={dossier.primarySubject.status} tone={subjectStatusTone} />
           <div className="mt-3 pt-3 border-t border-void-4">
-            <p className="text-[12px] text-text-2 leading-relaxed">
+            <p className="text-[12px] text-text-1 leading-relaxed">
               {dossier.primarySubject.summary}
             </p>
           </div>

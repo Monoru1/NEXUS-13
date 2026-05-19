@@ -173,7 +173,7 @@ export function EvidencePanel({ evidence, onView, viewed, index }: Props) {
               )}
             </h3>
 
-            <p className="text-[11px] text-text-2 leading-relaxed">
+            <p className="text-[11px] text-text-1 leading-relaxed">
               {evidence.summary}
             </p>
           </div>
