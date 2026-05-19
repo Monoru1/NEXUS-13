@@ -1,6 +1,6 @@
 # NEXUS//13 — Session Status
 
-**Last updated:** 2026-05-19  
+**Last updated:** 2026-05-19 (session 2)  
 **Branch:** `main` — all phases merged, production-ready
 
 ---
@@ -75,6 +75,34 @@ Hotfixes and 3D projection applied directly on main.
 2. **Page source** — HTML comment: N13-004 audit log fragment (internal system log)
 3. **Konami code** — ↑↑↓↓←→←→BA → CTRL-PRIME overlay (clearance L-7)
 4. **`/manifest`** — direct URL only, 6 assets listed including CTRL-PRIME
+
+---
+
+## Delivered this session (session 2)
+
+### fix/mobile-responsive
+- `nexus/page.tsx`: outer grid `grid-cols-12` → `grid-cols-1 lg:grid-cols-12`
+- Dossier card rows: replaced `grid-cols-12` sub-layout with `flex-col sm:flex-row`
+- Header: stacks on mobile, text 32px → 42px at sm
+
+### feat/3d-projections — large 3D hero banners on ALL pages
+- `components/projections/NexusProjection.tsx` — orbital command lattice, 3 torus rings, animated nodes, signal green
+- `components/projections/ArchivesProjection.tsx` — 4 stacked document planes, warn amber + alert red for KAIROS
+- `components/projections/SubjectsProjection.tsx` — 9-node Fibonacci sphere, status-colored, connection lines
+- `components/projections/TransmissionsProjection.tsx` — animated composite waveform, scanning particle, anomaly markers
+- `components/projections/TerminalProjection.tsx` — torus knot (p=2 q=3) with 80 streaming particles
+- All pages wired: nexus, archives, subjects, transmissions, terminal (above shell)
+- All dossiers now linked from archives index (VESPER/KAIROS/MERIDIAN accessible)
+
+### feat/multimedia-evidence
+- `types/narrative.ts`: added `imageUrl?`, `audioUrl?`, `transcript?` to Evidence type
+- `EvidencePanel`: PhotoPanel renders `<img>` when imageUrl set; AudioPanel renders `<audio>` when audioUrl set; DocumentPanel uses transcript? for type:transcript
+- 4 classified SVG images in `public/evidence/`:
+  - `n13-001-photo-surveillance.svg`: surveillance photo with crosshair HUD + metadata overlay
+  - `n13-001-doc-autopsy.svg`: leaked autopsy report with redaction bars + classification stamp
+  - `n13-002-spectrum-anomaly.svg`: frequency spectrum with 17.3 MHz anomaly spike
+  - `n13-004-casefile.svg`: MERIDIAN reopening directive with audit log anomaly
+- Dossier content enriched with imageUrl/transcript on relevant evidence items
 
 ---
 
