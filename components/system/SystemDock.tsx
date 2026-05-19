@@ -77,7 +77,7 @@ export function SystemDock() {
         aria-label="System navigation"
         className="
           lg:hidden
-          fixed bottom-0 left-0 right-0 z-30
+          fixed bottom-0 left-0 right-0 z-50
           flex items-stretch
           bg-void-1 border-t border-void-4
           h-14
@@ -92,8 +92,8 @@ export function SystemDock() {
               aria-current={active ? 'page' : undefined}
               aria-label={mod.label}
               className={`
-                relative flex-1 flex flex-col items-center justify-center
-                text-mono text-[8px] tracking-system
+                relative flex-1 flex flex-col items-center justify-center gap-0.5
+                text-mono tracking-system
                 border-r border-void-4 last:border-r-0
                 transition-colors duration-150
                 ${active
@@ -105,7 +105,8 @@ export function SystemDock() {
               {active && (
                 <span className="absolute top-0 left-0 right-0 h-px bg-signal" aria-hidden />
               )}
-              <span aria-hidden className="text-[11px] font-medium">{mod.code}</span>
+              <span aria-hidden className="text-[11px] font-medium leading-none">{mod.code}</span>
+              <span aria-hidden className="text-[7px] leading-none opacity-60">{mod.label.slice(0, 4)}</span>
             </Link>
           );
         })}

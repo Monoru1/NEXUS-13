@@ -52,8 +52,9 @@ export function StatusBar() {
   return (
     <div
       className="
+        hidden lg:flex
         fixed bottom-6 right-0 z-40
-        flex items-center gap-4 px-4 py-1.5
+        items-center gap-4 px-4 py-1.5
         text-[10px] tracking-system text-mono text-text-2
         border-t border-l border-void-4 bg-void-1/80 backdrop-blur-sm
       "
